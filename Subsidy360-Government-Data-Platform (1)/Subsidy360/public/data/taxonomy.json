@@ -1,0 +1,123 @@
+{
+  "states": [
+    "Andhra Pradesh",
+    "Bihar",
+    "Delhi",
+    "Gujarat",
+    "Karnataka",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Punjab",
+    "Rajasthan",
+    "Tamil Nadu",
+    "Telangana",
+    "Uttar Pradesh",
+    "West Bengal",
+    "Other"
+  ],
+  "applicants": [
+    {
+      "id": "farmer",
+      "label": "Farmer"
+    },
+    {
+      "id": "entrepreneur",
+      "label": "Entrepreneur / Startup"
+    },
+    {
+      "id": "msme",
+      "label": "MSME"
+    },
+    {
+      "id": "household",
+      "label": "Household / Individual"
+    },
+    {
+      "id": "shg",
+      "label": "SHG / FPO"
+    },
+    {
+      "id": "student",
+      "label": "Student"
+    }
+  ],
+  "sectors": [
+    {
+      "id": "agriculture",
+      "label": "Agriculture"
+    },
+    {
+      "id": "manufacturing",
+      "label": "Manufacturing"
+    },
+    {
+      "id": "services",
+      "label": "Services"
+    },
+    {
+      "id": "food-processing",
+      "label": "Food Processing"
+    },
+    {
+      "id": "energy",
+      "label": "Solar / Energy"
+    },
+    {
+      "id": "trading",
+      "label": "Trading"
+    },
+    {
+      "id": "household",
+      "label": "Household"
+    }
+  ],
+  "incomeBands": [
+    {
+      "id": "u3",
+      "label": "Below ₹3 lakh / yr"
+    },
+    {
+      "id": "u8",
+      "label": "₹3–8 lakh / yr"
+    },
+    {
+      "id": "u18",
+      "label": "₹8–18 lakh / yr"
+    },
+    {
+      "id": "a18",
+      "label": "Above ₹18 lakh / yr"
+    },
+    {
+      "id": "na",
+      "label": "Prefer not to say"
+    }
+  ],
+  "investBands": [
+    {
+      "id": 0,
+      "label": "No investment / relief only",
+      "v": 0
+    },
+    {
+      "id": 1,
+      "label": "Under ₹5 lakh",
+      "v": 4
+    },
+    {
+      "id": 2,
+      "label": "₹5–25 lakh",
+      "v": 15
+    },
+    {
+      "id": 3,
+      "label": "₹25 lakh – ₹1 crore",
+      "v": 60
+    },
+    {
+      "id": 4,
+      "label": "Above ₹1 crore",
+      "v": 250
+    }
+  ]
+}

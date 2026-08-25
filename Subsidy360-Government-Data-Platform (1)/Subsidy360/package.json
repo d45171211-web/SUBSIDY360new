@@ -1,0 +1,26 @@
+{
+  "name": "subsidy360",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Subsidy360 — evidence-first interface for navigating India's government schemes, eligibility and public funding (economics project prototype).",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "import:myscheme": "node scripts/import-pack.mjs --source myscheme",
+    "import:state": "node scripts/import-pack.mjs --source state",
+    "import:budget": "node scripts/import-pack.mjs --source budget",
+    "validate:data": "node scripts/validate-catalogue.mjs",
+    "loadtest:generate": "node scripts/generate-loadtest.mjs"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.12.7"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.2"
+  }
+}

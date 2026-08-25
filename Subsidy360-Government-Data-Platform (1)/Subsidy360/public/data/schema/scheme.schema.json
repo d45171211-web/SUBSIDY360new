@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Subsidy360 canonical scheme record",
+  "description": "Shape every record is normalised into before it reaches the interface. A field the source does not state must be null — never a guess. Null renders as 'Not reported'.",
+  "type": "object",
+  "required": ["id", "name", "source"],
+  "properties": {
+    "id": { "type": "string", "description": "Stable slug, unique across the catalogue. Later packs supersede earlier ones on collision." },
+    "short": { "type": "string", "description": "Display name / acronym." },
+    "name": { "type": "string", "description": "Full scheme name as published." },
+    "dept": { "type": ["string", "null"], "description": "Administering ministry or state department, as stated by the source." },
+    "level": { "type": ["string", "null"], "enum": ["Central", "State", null] },
+    "states": {
+      "description": "\"all\" for nationally available schemes, otherwise the list of states/UTs where it applies.",
+      "oneOf": [{ "const": "all" }, { "type": "array", "items": { "type": "string" } }]
+    },
+    "sectorLabel": { "type": ["string", "null"] },
+    "sectors": { "type": "array", "items": { "type": "string" } },
+    "applicants": { "type": "array", "items": { "type": "string", "enum": ["farmer", "entrepreneur", "msme", "household", "individual", "shg", "fpo", "student"] } },
+    "benefit": { "type": ["string", "null"], "description": "What the scheme provides, in the source's own terms. Null if not stated." },
+    "benefitType": { "type": ["string", "null"] },
+    "maxBenefitL": { "type": ["number", "null"], "description": "Maximum support in ₹ lakh, ONLY where the source states a ceiling. Null otherwise — never derived." },
+    "maxBenefitNote": { "type": ["string", "null"] },
+    "loanRequired": { "type": "boolean" },
+    "newBusinessOnly": { "type": "boolean" },
+    "investMinL": { "type": "number" },
+    "investMaxL": { "type": "number" },
+    "incomeCapL": { "type": ["number", "null"] },
+    "docs": { "type": "array", "items": { "type": "string" } },
+    "process": { "type": "array", "items": { "type": "string" } },
+    "restrictions": { "type": "array", "items": { "type": "string" } },
+    "source": { "type": "string", "description": "Official portal or notification. Records without a source are rejected at import." },
+    "verified": { "type": ["string", "null"], "description": "Month the record was last checked against its source, e.g. \"Jul 2026\". Null if never verified." },
+    "status": { "type": "string" },
+    "allocationCr": {
+      "type": ["object", "null"],
+      "description": "Budget figures in ₹ crore. BE, RE and Actual are separate and never interconverted.",
+      "properties": {
+        "fy": { "type": ["string", "null"] },
+        "be": { "type": ["number", "null"], "description": "Budget Estimate" },
+        "re": { "type": ["number", "null"], "description": "Revised Estimate" },
+        "actual": { "type": ["number", "null"], "description": "Actual expenditure" }
+      }
+    },
+    "popularity": { "type": "number" }
+  }
+}

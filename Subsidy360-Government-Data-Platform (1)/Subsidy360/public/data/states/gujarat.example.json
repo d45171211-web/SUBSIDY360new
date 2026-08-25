@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "pack": "state-gujarat",
+    "attribution": "Government of Gujarat scheme portals",
+    "sourceType": "state-portal-export",
+    "license": "Not reported",
+    "fetchedAt": null,
+    "notice": "FORMAT EXAMPLE PACK for the per-state import route. Only name, department, level, state and official portal are asserted; every unread factual field is null and renders as 'Not reported'. One pack per state scales the catalogue state by state without any frontend change."
+  },
+  "schemes": [
+    {
+      "id": "guj-textile-policy",
+      "short": "Gujarat Textile Policy",
+      "name": "Gujarat Textile Policy — assistance to textile units",
+      "dept": "Industries & Mines Department, Govt. of Gujarat",
+      "level": "State",
+      "states": ["Gujarat"],
+      "sectorLabel": "Textiles",
+      "sectors": ["manufacturing"],
+      "applicants": ["msme", "entrepreneur"],
+      "benefit": null,
+      "benefitType": null,
+      "maxBenefitL": null,
+      "docs": [],
+      "process": [],
+      "restrictions": [],
+      "source": "ifp.gujarat.gov.in",
+      "verified": null,
+      "status": "Verify current cycle",
+      "allocationCr": null
+    },
+    {
+      "id": "guj-agri-mechanisation",
+      "short": "GJ Farm Mechanisation",
+      "name": "Farm mechanisation assistance (i-Khedut)",
+      "dept": "Agriculture & Co-operation Dept., Govt. of Gujarat",
+      "level": "State",
+      "states": ["Gujarat"],
+      "sectorLabel": "Farm Equipment",
+      "sectors": ["agriculture"],
+      "applicants": ["farmer"],
+      "benefit": null,
+      "benefitType": null,
+      "maxBenefitL": null,
+      "docs": [],
+      "process": [],
+      "restrictions": [],
+      "source": "ikhedut.gujarat.gov.in",
+      "verified": null,
+      "status": "Verify current cycle",
+      "allocationCr": null
+    }
+  ]
+}

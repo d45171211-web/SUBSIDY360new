@@ -1,0 +1,30 @@
+{
+  "manifestVersion": 1,
+  "notice": "Subsidy360 pack manifest. Add a pack file to /public/data/<source>/ and register it here — the interface picks it up on reload with no code change. Set \"enabled\": false to park a pack without deleting it.",
+  "packs": [
+    {
+      "id": "myscheme-example-pack",
+      "kind": "schemes",
+      "connector": "myscheme",
+      "label": "myScheme catalogue export (example pack)",
+      "path": "data/myscheme/example-pack.json",
+      "enabled": true
+    },
+    {
+      "id": "state-gujarat",
+      "kind": "schemes",
+      "connector": "state-portals",
+      "label": "Gujarat state portal pack (example)",
+      "path": "data/states/gujarat.example.json",
+      "enabled": true
+    },
+    {
+      "id": "union-budget-demo",
+      "kind": "budget",
+      "connector": "union-budget",
+      "label": "Union Budget pack (demonstration figures)",
+      "path": "data/budget/union-budget.demo.json",
+      "enabled": true
+    }
+  ]
+}

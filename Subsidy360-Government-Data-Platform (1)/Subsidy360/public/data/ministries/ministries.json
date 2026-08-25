@@ -1,0 +1,141 @@
+{
+  "notice": "Reference list of ministries and state departments used for department-wise browsing. Names only — no scheme facts are stored here.",
+  "ministries": [
+    {
+      "key": "ministry-of-agriculture-farmers-welfare",
+      "name": "Ministry of Agriculture & Farmers Welfare"
+    },
+    {
+      "key": "ministry-of-msme",
+      "name": "Ministry of MSME"
+    },
+    {
+      "key": "ministry-of-new-renewable-energy",
+      "name": "Ministry of New & Renewable Energy"
+    },
+    {
+      "key": "ministry-of-food-processing-industries",
+      "name": "Ministry of Food Processing Industries"
+    },
+    {
+      "key": "ministry-of-finance",
+      "name": "Ministry of Finance"
+    },
+    {
+      "key": "dept-of-financial-services-ministry-of-finance",
+      "name": "Dept. of Financial Services, Ministry of Finance"
+    },
+    {
+      "key": "ministry-of-rural-development",
+      "name": "Ministry of Rural Development"
+    },
+    {
+      "key": "ministry-of-housing-urban-affairs",
+      "name": "Ministry of Housing & Urban Affairs"
+    },
+    {
+      "key": "ministry-of-education",
+      "name": "Ministry of Education"
+    },
+    {
+      "key": "ministry-of-skill-development-entrepreneurship",
+      "name": "Ministry of Skill Development & Entrepreneurship"
+    },
+    {
+      "key": "ministry-of-social-justice-empowerment",
+      "name": "Ministry of Social Justice & Empowerment"
+    },
+    {
+      "key": "ministry-of-tribal-affairs",
+      "name": "Ministry of Tribal Affairs"
+    },
+    {
+      "key": "ministry-of-women-child-development",
+      "name": "Ministry of Women & Child Development"
+    },
+    {
+      "key": "ministry-of-health-family-welfare",
+      "name": "Ministry of Health & Family Welfare"
+    },
+    {
+      "key": "ministry-of-labour-employment",
+      "name": "Ministry of Labour & Employment"
+    },
+    {
+      "key": "ministry-of-commerce-industry",
+      "name": "Ministry of Commerce & Industry"
+    },
+    {
+      "key": "ministry-of-textiles",
+      "name": "Ministry of Textiles"
+    },
+    {
+      "key": "ministry-of-fisheries-animal-husbandry-dairying",
+      "name": "Ministry of Fisheries, Animal Husbandry & Dairying"
+    },
+    {
+      "key": "ministry-of-jal-shakti",
+      "name": "Ministry of Jal Shakti"
+    },
+    {
+      "key": "ministry-of-electronics-information-technology",
+      "name": "Ministry of Electronics & Information Technology"
+    },
+    {
+      "key": "ministry-of-science-technology",
+      "name": "Ministry of Science & Technology"
+    },
+    {
+      "key": "ministry-of-tourism",
+      "name": "Ministry of Tourism"
+    },
+    {
+      "key": "ministry-of-power",
+      "name": "Ministry of Power"
+    },
+    {
+      "key": "ministry-of-petroleum-natural-gas",
+      "name": "Ministry of Petroleum & Natural Gas"
+    },
+    {
+      "key": "ministry-of-minority-affairs",
+      "name": "Ministry of Minority Affairs"
+    },
+    {
+      "key": "ministry-of-youth-affairs-sports",
+      "name": "Ministry of Youth Affairs & Sports"
+    },
+    {
+      "key": "ministry-of-culture",
+      "name": "Ministry of Culture"
+    },
+    {
+      "key": "ministry-of-cooperation",
+      "name": "Ministry of Cooperation"
+    },
+    {
+      "key": "ministry-of-panchayati-raj",
+      "name": "Ministry of Panchayati Raj"
+    },
+    {
+      "key": "ministry-of-road-transport-highways",
+      "name": "Ministry of Road Transport & Highways"
+    },
+    {
+      "key": "industries-mines-department-govt-of-gujarat",
+      "name": "Industries & Mines Department, Govt. of Gujarat"
+    },
+    {
+      "key": "agriculture-co-operation-dept-govt-of-gujarat",
+      "name": "Agriculture & Co-operation Dept., Govt. of Gujarat"
+    },
+    {
+      "key": "industries-department-govt-of-rajasthan",
+      "name": "Industries Department, Govt. of Rajasthan"
+    },
+    {
+      "key": "industries-department-govt-of-maharashtra",
+      "name": "Industries Department, Govt. of Maharashtra"
+    }
+  ]
+}
