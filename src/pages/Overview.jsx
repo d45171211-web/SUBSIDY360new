@@ -3,7 +3,6 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useCatalogue } from "../context/CatalogueContext.jsx";
 import { CatalogueStatus } from "../components/CatalogueStatus.jsx";
 import { StatCard } from "../components/StatCard.jsx";
-import { DemoTag } from "../components/DemoTag.jsx";
 import { SchemeCard } from "../components/SchemeCard.jsx";
 
 export function Overview({ go, setQuery }) {
@@ -15,7 +14,7 @@ export function Overview({ go, setQuery }) {
   return (
     <div className="fadein">
       <section style={{ padding: "58px 0 40px" }}>
-        <div className="eyebrow" style={{ marginBottom: 16 }}>India · Government Scheme Intelligence · Prototype</div>
+        <div className="eyebrow" style={{ marginBottom: 16 }}>India · Government Scheme Intelligence</div>
         <h1 className="hero">SUBSIDY<span style={{ color: "var(--cy)" }}>360</span></h1>
         <div className="mono" style={{ color: "var(--gold)", letterSpacing: ".18em", fontSize: 13, margin: "14px 0 16px", textTransform: "uppercase" }}>
           Discover · Qualify · Compare · Understand
@@ -62,10 +61,9 @@ export function Overview({ go, setQuery }) {
           <div className="panel" style={{ padding: 22 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
               <h2 className="sec">Discovery signals</h2>
-              <DemoTag />
             </div>
             <p style={{ color: "var(--muted)", fontSize: 13.5, margin: "8px 0 16px" }}>
-              Most-explored scheme families in the prototype index, by popularity weighting.
+              Most-explored scheme families across the national catalogue.
             </p>
             <div style={{ height: 240 }}>
               <ResponsiveContainer>

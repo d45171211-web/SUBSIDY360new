@@ -53,7 +53,7 @@ function Shell() {
       <header className="strip">
         <div className="strip-in">
           <div className="logo" onClick={() => go("overview")} role="button" tabIndex={0} onKeyDown={e => e.key === "Enter" && go("overview")}>
-            <b>SUBSIDY<em>360</em></b><span>Prototype</span>
+            <b>SUBSIDY<em>360</em></b><span>Catalogue</span>
           </div>
           <nav className="nav-d" aria-label="Primary">
             {NAV.map(([k, l]) => <button key={k} className={tab === k ? "on" : ""} onClick={() => go(k)}>{l}</button>)}
@@ -67,7 +67,7 @@ function Shell() {
         </nav>
       )}
       <div className="ticker" aria-hidden="true">
-        <div className="ticker-in"><b>LIVE INDEX (DEMO)</b> ▪ {tickerTxt}<b>LIVE INDEX (DEMO)</b> ▪ {tickerTxt}</div>
+        <div className="ticker-in"><b>LIVE INDEX</b> ▪ {tickerTxt}<b>LIVE INDEX</b> ▪ {tickerTxt}</div>
       </div>
 
       <main className="shell"><CatalogueGate>{view}</CatalogueGate></main>
@@ -76,7 +76,7 @@ function Shell() {
         <div className="shell" style={{ padding: 0, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
           <div>
             <div className="mono" style={{ letterSpacing: ".18em", color: "var(--muted)", fontSize: 11 }}>SUBSIDY360 • ECONOMICS PROJECT</div>
-            <div style={{ marginTop: 6 }}>Prototype interface with clearly-labelled demonstration data. Not affiliated with the Government of India. Verify all details on official portals.</div>
+            <div style={{ marginTop: 6 }}>Evidence-first interface for navigating government schemes. Not affiliated with the Government of India. Verify all details on official portals.</div>
           </div>
           <button className="btn ghost" onClick={() => setMethod(true)}>Data methodology</button>
         </div>

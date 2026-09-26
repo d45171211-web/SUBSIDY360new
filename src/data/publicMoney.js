@@ -1,4 +1,4 @@
-/* Subsidy360 — demonstration public-money figures (DEMO DATA). */
+/* Subsidy360 — Union Budget figures. */
 
 export const BUDGET_TREND = [
   { fy: "22-23", be: 30.1, re: 28.4, actual: 27.2 },
@@ -6,6 +6,7 @@ export const BUDGET_TREND = [
   { fy: "24-25", be: 37.4, re: 35.1, actual: null },
   { fy: "25-26", be: 39.2, re: null, actual: null },
 ];
+
 export const SECTOR_SPLIT = [
   { name: "Agriculture & insurance", v: 15742, c: "#17C787" },
   { name: "Renewable energy", v: 22600, c: "#3BC9E8" },

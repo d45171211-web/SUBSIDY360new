@@ -1,5 +1,4 @@
 import { useCountUp } from "./useCountUp.js";
-import { DemoTag } from "./DemoTag.jsx";
 
 export function StatCard({ label, value, suffix, prefix, decimals = 0, sub }) {
   const v = useCountUp(value);
@@ -11,7 +10,6 @@ export function StatCard({ label, value, suffix, prefix, decimals = 0, sub }) {
       </div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 9, gap: 6, flexWrap: "wrap" }}>
         <span style={{ fontSize: 11, color: "var(--muted2)" }}>{sub}</span>
-        <DemoTag />
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, Legend } from "recharts";
 import { BUDGET_TREND, SECTOR_SPLIT } from "../data/publicMoney.js";
 import { useCatalogue } from "../context/CatalogueContext.jsx";
-import { DemoTag } from "../components/DemoTag.jsx";
 
 export function PublicMoney({ openMethod }) {
   const { schemes: SCHEMES, budget, facets } = useCatalogue();
@@ -23,14 +22,13 @@ export function PublicMoney({ openMethod }) {
         </div>
         <button className="btn ghost" onClick={openMethod}>Data methodology →</button>
       </div>
-      <p className="sub" style={{ fontSize: 13.5, margin: "8px 0 8px" }}>
+      <p className="sub" style={{ fontSize: 13.5, margin: "8px 0 20px" }}>
         BE = Budget Estimate · RE = Revised Estimate · Actual = actual expenditure. An allocation is never restated as sanctioned, released or utilised unless the source reports it.
       </p>
-      <div style={{ marginBottom: 20 }}><DemoTag /> <span style={{ fontSize: 11.5, color: "var(--muted2)" }}>All figures on this page are demonstration values for the prototype interface.</span></div>
 
       <div className="grid-cards" style={{ gridTemplateColumns: "1.2fr 1fr" }}>
         <div className="panel" style={{ padding: 20 }}>
-          <div className="tt" style={{ marginBottom: 4 }}>BE by scheme, FY 2025-26 (₹ crore) — prototype set</div>
+          <div className="tt" style={{ marginBottom: 4 }}>BE by scheme, FY 2025-26 (₹ crore)</div>
           <div style={{ height: 280, marginTop: 10 }}>
             <ResponsiveContainer>
               <BarChart data={withAlloc.map(({ s, a }) => ({ n: s.short, BE: a.be }))} layout="vertical" margin={{ top: 0, right: 24, left: 8, bottom: 0 }}>

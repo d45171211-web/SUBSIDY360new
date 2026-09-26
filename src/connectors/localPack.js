@@ -1,9 +1,8 @@
 /* Subsidy360 — local JSON pack connector.
  *
  * Reads scheme packs that sit in /public/data (served statically). This is the
- * connector that carries the myScheme catalogue export, state portal exports and
- * ministry packs. Dropping a new pack file in and listing it in manifest.json is
- * the entire "import 4,700 schemes" workflow — no frontend change required.
+ * connector that carries the official catalogue export, state portal exports and
+ * ministry packs.
  */
 
 import { normalizeScheme, validateScheme } from "../data/schema.js";
@@ -32,9 +31,11 @@ export async function fetchJson(path, { timeout = REQUEST_TIMEOUT_MS } = {}) {
 export async function loadPack(entry) {
   const json = await fetchJson(entry.path);
   const meta = json.meta || {};
-  const raw = Array.isArray(json) ? json : json.schemes || json.records || [];
+  let raw = Array.isArray(json) ? json : json.schemes || json.records || [];
+  if (Array.isArray(raw[0])) raw = raw.flat();
   const origin = {
     connector: entry.connector || "local-pack",
+    attribution: meta.attribution || entry.label || "Government Scheme Portal",
     sourceType: meta.sourceType || entry.sourceType || "official-portal-export",
     license: meta.license || entry.license || "Not reported",
     pack: entry.id || entry.path,

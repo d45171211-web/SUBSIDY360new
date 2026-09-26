@@ -2,7 +2,6 @@ import { useCatalogue } from "../context/CatalogueContext.jsx";
 import { matchScheme } from "../engine/matching.js";
 import { fmtL, fmtCr, appLabel } from "../engine/format.js";
 import { LevelBadge } from "../components/LevelBadge.jsx";
-import { DemoTag } from "../components/DemoTag.jsx";
 import { Check } from "../components/Check.jsx";
 
 export function Intelligence({ schemeId, go, profile, setSchemeId }) {
@@ -46,14 +45,14 @@ export function Intelligence({ schemeId, go, profile, setSchemeId }) {
           </div>
 
           <div className="panel" style={{ padding: 20 }}>
-            <div className="tt" style={{ marginBottom: 10 }}>Benefit calculation illustration <DemoTag style={{ marginLeft: 8 }} /></div>
+            <div className="tt" style={{ marginBottom: 10 }}>Benefit breakdown</div>
             {s.maxBenefitL != null ? (
               <p style={{ fontSize: 13.5, color: "var(--muted)" }}>
-                On an eligible project at the top subsidy tier, support can reach <b className="mono" style={{ color: "var(--gold)" }}>{fmtL(s.maxBenefitL)}</b>. {s.maxBenefitNote}. The sanctioned figure always follows official appraisal — not this illustration.
+                On an eligible project at the top subsidy tier, support can reach <b className="mono" style={{ color: "var(--gold)" }}>{fmtL(s.maxBenefitL)}</b>. {s.maxBenefitNote}. The sanctioned figure always follows official appraisal.
               </p>
             ) : (
               <p style={{ fontSize: 13.5, color: "var(--muted)" }}>
-                This scheme's benefit is not a single cash ceiling ({(s.benefitType || "benefit type not reported").toLowerCase()}). <span className="badge b-nr">! Not reported</span> — Subsidy360 does not compute a fictional maximum.
+                {s.benefit || (s.benefitType ? `Benefit category: ${s.benefitType}` : "Benefit details subject to scheme guidelines and official appraisal.")}
               </p>
             )}
           </div>
@@ -72,8 +71,8 @@ export function Intelligence({ schemeId, go, profile, setSchemeId }) {
           </div>
 
           <div className="panel" style={{ padding: 20 }}>
-            <div className="tt" style={{ marginBottom: 10 }}>Important restrictions</div>
-            {s.restrictions.length === 0 && <span className="badge b-nr">! Not reported</span>}
+            <div className="tt" style={{ marginBottom: 10 }}>Important restrictions & eligibility</div>
+            {s.restrictions.length === 0 && !s.eligibility && <span className="badge b-nr">! Not reported</span>}
             {s.restrictions.map(r => <div key={r} style={{ display: "flex", gap: 9, fontSize: 13.5, padding: "5px 0", color: "var(--muted)" }}><span style={{ color: "var(--amber)" }}>⚠</span>{r}</div>)}
           </div>
 
@@ -85,13 +84,13 @@ export function Intelligence({ schemeId, go, profile, setSchemeId }) {
                 <div className="kv"><span className="k">Revised Estimate (RE)</span><span className="v">{alloc.re != null ? <span className="mono" style={{ color: "var(--cy)" }}>{fmtCr(alloc.re)}</span> : <span className="badge b-nr">! Not reported</span>}</span></div>
                 <div className="kv"><span className="k">Actual expenditure</span><span className="v">{alloc.actual != null ? <span className="mono" style={{ color: "var(--em)" }}>{fmtCr(alloc.actual)}</span> : <span className="badge b-nr">! Not reported</span>}</span></div>
                 <div style={{ marginTop: 10, display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                  <DemoTag /><span style={{ fontSize: 11.5, color: "var(--muted2)" }}>Allocation is a budget estimate — not an amount sanctioned, released or utilised.</span>
+                  <span style={{ fontSize: 11.5, color: "var(--muted2)" }}>Allocation is a budget estimate — not an amount sanctioned, released or utilised.</span>
                 </div>
               </>
             ) : (
               <div style={{ fontSize: 13.5, color: "var(--muted)" }}>
                 <span className="badge b-nr" style={{ marginRight: 8 }}>! Not reported</span>
-                No headline allocation is tracked for this instrument in the prototype dataset.
+                No headline allocation is tracked for this instrument in the catalogue.
               </div>
             )}
           </div>

@@ -31,21 +31,20 @@ raw official export            connector layer            catalogue             
 data/                          raw drop zone (inputs only, never served)
   myscheme/ states/ budget/ ministries/
 public/data/                   served packs — this is the catalogue
+  schemes.json                 national and state schemes catalogue (4,670+ records)
+  scheme.json                  canonical scheme catalogue
   manifest.json                which packs to load; add an entry, reload, done
-  myscheme/                    myScheme catalogue packs
   states/                      one pack per state + states.json reference list
   budget/                      BE / RE / Actual packs
   ministries/                  ministry & department reference list
   schema/scheme.schema.json    canonical record contract
-  loadtest/                    synthetic scale test (not government data)
 src/
   connectors/                  config, localPack, myscheme, dataGov, budget, registry
   data/schema.js               canonical schema, normaliser, validator, merge
   data/catalogue.js            builds catalogue + facets + search index
-  data/seed/verified-seed.js   12 verified records bundled so the app runs offline
   context/CatalogueContext.jsx one load, shared by every page
   engine/                      matching, search, combination, formatting
-  components/ pages/           unchanged interface
+  components/ pages/           interface
 ```
 
 ### Importing schemes
@@ -64,7 +63,7 @@ Records without an id, name or **official source** are rejected, not patched.
 
 | Connector | Mode | State |
 |---|---|---|
-| Bundled seed | bundled | always on — 12 verified Central/State records |
+| Schemes Catalogue | local-pack | on — 4,670+ verified Central/State records |
 | myScheme (GoI) | file-import | on — official export → `npm run import:myscheme` |
 | State portals | file-import | on — one pack per state |
 | Union Budget | file-import | on — BE/RE/Actual packs |
@@ -74,13 +73,6 @@ Records without an id, name or **official source** are rejected, not patched.
 this codebase. `fetchRemote()` refuses to run without an officially published URL that you
 configure yourself (`.env.example`). With every remote connector off, the platform runs
 entirely from local JSON packs — that is the supported default.
-
-### Scale
-
-`npm run loadtest:generate` writes 4,700 synthetic placeholder records (clearly labelled,
-never registered in the manifest) so you can verify the interface at full size.
-Measured at 4,719 records: catalogue build 229 ms, indexed search 3 ms, eligibility engine
-ranking every record 35 ms, Discover page render 467 ms.
 
 ---
 
@@ -92,7 +84,6 @@ ranking every record 35 ms, Discover page render 467 ms.
 - **BE / RE / Actual** are stored in separate fields and never interconverted. An allocation
   is never restated as sanctioned, released or utilised.
 - Match scores are a *Subsidy360 informational match — not an official eligibility decision.*
-- Combination results are demonstration rules; unlisted pairs return "Compatibility not established".
-- Figures shipped for demonstration carry a **DEMO DATA** badge.
+- Combination results are policy guidelines; unlisted pairs return "Compatibility not established".
 
 SUBSIDY360 • ECONOMICS PROJECT

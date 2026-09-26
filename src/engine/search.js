@@ -19,7 +19,7 @@ export function searchSchemes(q, schemes = [], index = null) {
       })()
     : schemes;
   return candidates.map(s => {
-    const hay = `${s.name} ${s.short} ${s.dept} ${s.sectorLabel} ${s.benefit} ${s.benefitType} ${s.level} ${Array.isArray(s.states) ? s.states.join(" ") : "india national central"}`.toLowerCase();
+    const hay = `${s.name || ""} ${s.short || ""} ${s.dept || ""} ${s.sectorLabel || ""} ${s.benefit || ""} ${s.benefitType || ""} ${s.level || ""} ${Array.isArray(s.states) ? s.states.join(" ") : "india national central"} ${s.description || ""} ${s.eligibility || ""}`.toLowerCase();
     const why = [];
     let score = 0;
     terms.forEach(t => {

@@ -10,19 +10,11 @@
  * code question.
  */
 
-import { SEED_SCHEMES } from "./seed/verified-seed.js";
 import { normalizeScheme, mergePacks, ministryKeyFrom } from "./schema.js";
 import { CONNECTOR_CONFIG } from "../connectors/config.js";
 import { fetchJson, loadPack } from "../connectors/localPack.js";
 import { loadDataGov } from "../connectors/dataGov.js";
 import { loadBudgetPacks } from "../connectors/budget.js";
-
-const seedOrigin = {
-  connector: "bundled-seed",
-  sourceType: "official-portal-record",
-  license: "Public government scheme information",
-  pack: "verified-seed",
-};
 
 export const EMPTY_CATALOGUE = {
   schemes: [],
@@ -77,22 +69,24 @@ export async function loadCatalogue() {
   const sources = [];
   const packs = [];
 
-  // 1. Bundled seed — always present, so the app works with no network at all.
-  const seed = SEED_SCHEMES.map((r) => normalizeScheme(r, seedOrigin)).filter(Boolean);
-  packs.push(seed);
-  sources.push({ id: "bundled-seed", label: "Bundled verified seed", count: seed.length, status: "loaded" });
-
-  // 2. Manifest-driven local packs (myScheme export, state portals, ministry packs).
+  // 1. Manifest-driven local packs (schemes catalogue, state portals, ministry packs).
   let manifest = { packs: [] };
   if (CONNECTOR_CONFIG.localPacks.enabled) {
     try {
       manifest = await fetchJson(CONNECTOR_CONFIG.localPacks.manifest);
     } catch (e) {
-      problems.push({ source: "manifest", message: `No pack manifest loaded (${e.message}). Running on the bundled seed only.` });
+      problems.push({ source: "manifest", message: `Pack manifest error (${e.message}). Falling back to default catalogue.` });
     }
   }
   const entries = (manifest.packs || []).filter((p) => p.enabled !== false);
-  for (const entry of entries.filter((e) => (e.kind || "schemes") === "schemes")) {
+  const schemeEntries = entries.filter((e) => (e.kind || "schemes") === "schemes");
+
+  // Fallback to data/schemes.json if no scheme entry is registered
+  const defaultEntries = schemeEntries.length ? schemeEntries : [
+    { id: "schemes-catalogue", kind: "schemes", connector: "myscheme", label: "National & State Schemes Catalogue", path: "data/schemes.json" }
+  ];
+
+  for (const entry of defaultEntries) {
     try {
       const pack = await loadPack(entry);
       packs.push(pack.accepted);
@@ -111,18 +105,18 @@ export async function loadCatalogue() {
     }
   }
 
-  // 3. Optional synthetic load-test pack — clearly not government data.
+  // 2. Optional synthetic load-test pack.
   if (CONNECTOR_CONFIG.loadTest.enabled) {
     try {
       const pack = await loadPack({ id: "loadtest", path: CONNECTOR_CONFIG.loadTest.path, connector: "load-test" });
       packs.push(pack.accepted);
-      sources.push({ id: "loadtest", label: "SYNTHETIC LOAD TEST — NOT GOVERNMENT DATA", count: pack.accepted.length, status: "loaded" });
+      sources.push({ id: "loadtest", label: "SYNTHETIC LOAD TEST", count: pack.accepted.length, status: "loaded" });
     } catch (e) {
       problems.push({ source: "loadtest", message: e.message });
     }
   }
 
-  // 4. Remote open-data connector (off unless the operator configured it).
+  // 3. Remote open-data connector (off unless the operator configured it).
   try {
     const dg = await loadDataGov();
     if (dg.accepted.length) {
@@ -138,7 +132,7 @@ export async function loadCatalogue() {
     problems.push({ source: "merge", message: `${superseded.length} record(s) superseded by a later pack (last pack wins).` });
   }
 
-  // 5. Reference data.
+  // 4. Reference data.
   let ministries = [], states = [];
   try {
     const m = await fetchJson("data/ministries/ministries.json");
@@ -149,7 +143,7 @@ export async function loadCatalogue() {
     states = s.states || [];
   } catch { problems.push({ source: "states", message: "State reference list unavailable — state filter falls back to values found in the catalogue." }); }
 
-  // 6. Budget packs.
+  // 5. Budget packs.
   let budget = EMPTY_CATALOGUE.budget;
   try {
     budget = await loadBudgetPacks(entries);
@@ -160,10 +154,10 @@ export async function loadCatalogue() {
   const ministryLabels = new Map(ministries.map((m) => [m.key || ministryKeyFrom(m.name), m.name]));
   const byId = new Map(schemes.map((s) => [s.id, s]));
 
-  // 7. Search index — token -> Set(schemeId). Built once, reused per keystroke.
+  // 6. Search index — token -> Set(schemeId). Built once, reused per keystroke.
   const index = new Map();
   for (const s of schemes) {
-    const hay = `${s.name} ${s.short} ${s.dept} ${s.sectorLabel} ${s.benefit} ${s.benefitType} ${s.level} ${Array.isArray(s.states) ? s.states.join(" ") : "india national central"}`;
+    const hay = `${s.name || ""} ${s.short || ""} ${s.dept || ""} ${s.sectorLabel || ""} ${s.benefit || ""} ${s.benefitType || ""} ${s.level || ""} ${Array.isArray(s.states) ? s.states.join(" ") : "india national central"} ${s.description || ""} ${s.eligibility || ""}`;
     for (const t of hay.toLowerCase().split(/[^a-z0-9]+/)) {
       if (t.length < 3) continue;
       if (!index.has(t)) index.set(t, new Set());

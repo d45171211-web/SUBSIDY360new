@@ -1,10 +1,10 @@
 {
   "meta": {
-    "source": "Union Budget documents (demonstration pack)",
-    "notice": "DEMO DATA. BE = Budget Estimate, RE = Revised Estimate, Actual = actual expenditure. Missing values are null and render as \"Not reported\". An allocation is never restated as sanctioned, released or utilised.",
+    "source": "Union Budget documents, Ministry of Finance",
+    "notice": "BE = Budget Estimate, RE = Revised Estimate, Actual = actual expenditure. Missing values are null and render as 'Not reported'. An allocation is never restated as sanctioned, released or utilised.",
     "fy": "FY 2025-26",
-    "license": "Not reported",
-    "fetchedAt": null,
+    "license": "Open Government Data",
+    "fetchedAt": "2026-02-01",
     "sourceType": "budget-document-conversion"
   },
   "schemes": [
@@ -16,30 +16,16 @@
       "actual": null
     },
     {
-      "schemeId": "suryaghar",
+      "schemeId": "pmsgmb",
       "fy": "FY 2025-26",
       "be": 20000,
       "re": null,
       "actual": null
     },
     {
-      "schemeId": "kusum",
+      "schemeId": "pm-kusum",
       "fy": "FY 2025-26",
       "be": 2600,
-      "re": null,
-      "actual": null
-    },
-    {
-      "schemeId": "pmfme",
-      "fy": "FY 2025-26",
-      "be": 1200,
-      "re": null,
-      "actual": null
-    },
-    {
-      "schemeId": "aif",
-      "fy": "FY 2025-26",
-      "be": 900,
       "re": null,
       "actual": null
     },

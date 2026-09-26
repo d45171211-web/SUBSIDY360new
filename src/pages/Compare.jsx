@@ -2,7 +2,6 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useCatalogue } from "../context/CatalogueContext.jsx";
 import { fmtL, appLabel } from "../engine/format.js";
 import { LevelBadge } from "../components/LevelBadge.jsx";
-import { DemoTag } from "../components/DemoTag.jsx";
 
 export function Compare({ compare, toggleCompare, go }) {
   const { schemes: SCHEMES } = useCatalogue();
@@ -50,7 +49,7 @@ export function Compare({ compare, toggleCompare, go }) {
           </div>
           <div className="panel" style={{ padding: 20, marginTop: 16 }}>
             <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
-              <h2 className="sec" style={{ fontSize: 17 }}>Maximum reported cash benefit (₹ lakh)</h2><DemoTag />
+              <h2 className="sec" style={{ fontSize: 17 }}>Maximum reported cash benefit (₹ lakh)</h2>
             </div>
             <p style={{ fontSize: 12, color: "var(--muted2)", marginBottom: 10 }}>Schemes without a reported cash ceiling are shown at zero and flagged “Not reported” — they are not lesser schemes, just differently structured.</p>
             <div style={{ height: 220 }}>

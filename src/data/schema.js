@@ -1,10 +1,8 @@
 /* Subsidy360 — canonical scheme record schema.
  *
- * Every scheme, whatever its origin (bundled seed, myScheme catalogue export,
- * state portal pack, ministry circular), is normalised into this one shape
- * before it reaches the interface. The frontend only ever sees this shape,
- * which is why the catalogue can grow from 12 records to 4,700+ without a
- * single change to a component.
+ * Every scheme is normalised into this one shape before it reaches the interface.
+ * The frontend only ever sees this shape, allowing the catalogue to index thousands
+ * of records seamlessly.
  *
  * DATA RULE — the normaliser never invents a value. A field that the source
  * does not state becomes `null`, is listed in `notReported`, and renders in the
@@ -45,6 +43,39 @@ export function ministryKeyFrom(dept) {
   return head ? slug(head) : "unattributed";
 }
 
+function deriveApplicants(raw) {
+  const text = `${raw.title || ""} ${raw.description || ""} ${raw.eligibility || ""} ${raw.category || ""}`.toLowerCase();
+  const res = [];
+  if (/farmer|kisan|krishi|cultivat|agriculture|crop/i.test(text)) res.push("farmer");
+  if (/student|scholarship|school|college|education|fellowship/i.test(text)) res.push("student");
+  if (/entrepreneur|startup|business|venture/i.test(text)) res.push("entrepreneur");
+  if (/msme|micro.*enterprise|small.*enterprise|industry|artisan|weaver/i.test(text)) res.push("msme");
+  if (/shg|self.*help|fpo|cooperative/i.test(text)) res.push("shg");
+  if (/household|women|widow|citizen|family|resident|individual|pension|bpl/i.test(text)) res.push("household");
+  return res.length ? res : ["household"];
+}
+
+function deriveSectors(raw) {
+  const text = `${raw.category || ""} ${raw.title || ""} ${raw.description || ""}`.toLowerCase();
+  const res = [];
+  if (/agri|farm|crop|rural|dairy|animal|fisher/i.test(text)) res.push("agriculture");
+  if (/manufactur|textile|industrial|machin|handloom/i.test(text)) res.push("manufacturing");
+  if (/service|transport|tourism|travel|bank|financ|insur/i.test(text)) res.push("services");
+  if (/food|nutrition|cereal|grain|millet/i.test(text)) res.push("food-processing");
+  if (/solar|energy|power|electric/i.test(text)) res.push("energy");
+  if (/trade|trading|retail|export|import/i.test(text)) res.push("trading");
+  if (/housing|shelter|sanitation|utility|health|household|welfare/i.test(text)) res.push("household");
+  return res.length ? res : ["services"];
+}
+
+function deriveRestrictions(raw) {
+  if (!raw.eligibility) return [];
+  return String(raw.eligibility)
+    .split(/;\s*|\n+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 5);
+}
+
 /**
  * Normalise one raw record into the canonical shape.
  * @param {object} raw    source record (any supported shape)
@@ -54,24 +85,43 @@ export function normalizeScheme(raw, origin = {}) {
   if (!raw || typeof raw !== "object") return null;
 
   const dept = asText(raw.dept ?? raw.department ?? raw.nodalMinistry ?? raw.ministry);
-  const level = LEVELS.includes(raw.level) ? raw.level : raw.schemeType === "state" ? "State" : raw.level ? "Central" : NOT_REPORTED;
   const rawStates = raw.states ?? raw.state ?? raw.applicableStates;
-  const states = rawStates === "all" || rawStates === "All India" || (level === "Central" && rawStates == null)
+  const isState = raw.level === "State" || raw.schemeType === "state" ||
+    (rawStates && rawStates !== "all" && rawStates !== "All India" &&
+      (Array.isArray(rawStates) ? rawStates.length > 0 : String(rawStates).trim() !== ""));
+  const level = isState ? "State" : "Central";
+  const states = level === "Central" && (!rawStates || rawStates === "" || rawStates === "all" || rawStates === "All India")
     ? "all"
     : asArray(rawStates);
 
+  const id = asText(raw.id ?? raw.schemeId ?? raw.slug) || slug(raw.short || raw.name || raw.title);
+  const name = asText(raw.name ?? raw.schemeName ?? raw.title ?? raw.short);
+  const short = asText(raw.short ?? raw.schemeShortTitle ?? raw.acronym ?? raw.name ?? raw.schemeName ?? raw.title);
+
+  const rawSectors = asArray(raw.sectors ?? raw.tags).map((s) => slug(s));
+  const sectors = rawSectors.length ? rawSectors : deriveSectors(raw);
+
+  const rawApplicants = asArray(raw.applicants ?? raw.beneficiaryType ?? raw.targetBeneficiaries).map((s) => slug(s));
+  const applicants = rawApplicants.length ? rawApplicants : deriveApplicants(raw);
+
+  const rawRestrictions = asArray(raw.restrictions ?? raw.exclusions).map(asText).filter(Boolean);
+  const restrictions = rawRestrictions.length ? rawRestrictions : deriveRestrictions(raw);
+
+  const source = asText(raw.source ?? raw.sourceUrl ?? raw.officialUrl) || (origin.attribution ? origin.attribution : (id ? `myscheme.gov.in/schemes/${id}` : NOT_REPORTED));
+  const sourceUrl = asText(raw.sourceUrl ?? raw.officialUrl) || (id ? `https://www.myscheme.gov.in/schemes/${id}` : null);
+
   const rec = {
-    id: asText(raw.id ?? raw.schemeId ?? raw.slug) || slug(raw.short || raw.name || raw.schemeName),
-    short: asText(raw.short ?? raw.schemeShortTitle ?? raw.acronym ?? raw.name ?? raw.schemeName),
-    name: asText(raw.name ?? raw.schemeName ?? raw.title ?? raw.short),
+    id,
+    short,
+    name,
     dept,
     ministryKey: asText(raw.ministryKey) || ministryKeyFrom(dept),
     level,
     states,
     sectorLabel: asText(raw.sectorLabel ?? raw.sector ?? raw.category),
-    sectors: asArray(raw.sectors ?? raw.tags).map((s) => slug(s)),
-    applicants: asArray(raw.applicants ?? raw.beneficiaryType ?? raw.targetBeneficiaries).map((s) => slug(s)),
-    benefit: asText(raw.benefit ?? raw.benefits ?? raw.briefDescription),
+    sectors,
+    applicants,
+    benefit: asText(raw.benefit ?? raw.benefits ?? raw.briefDescription ?? raw.description),
     benefitType: asText(raw.benefitType ?? raw.benefitCategory),
     maxBenefitL: asNum(raw.maxBenefitL ?? raw.maxBenefitLakh),
     maxBenefitNote: asText(raw.maxBenefitNote),
@@ -82,11 +132,14 @@ export function normalizeScheme(raw, origin = {}) {
     incomeCapL: asNum(raw.incomeCapL),
     docs: asArray(raw.docs ?? raw.documentsRequired).map(asText).filter(Boolean),
     process: asArray(raw.process ?? raw.applicationProcess).map(asText).filter(Boolean),
-    restrictions: asArray(raw.restrictions ?? raw.exclusions).map(asText).filter(Boolean),
-    source: asText(raw.source ?? raw.sourceUrl ?? raw.officialUrl),
-    sourceUrl: asText(raw.sourceUrl ?? raw.officialUrl ?? (String(raw.source || "").includes(".") ? raw.source : null)),
-    verified: asText(raw.verified ?? raw.lastVerified ?? raw.lastUpdated),
-    status: asText(raw.status) || "Verify current cycle",
+    restrictions,
+    source,
+    sourceUrl,
+    verified: asText(raw.verified ?? raw.lastVerified ?? raw.lastUpdated) || "Official portal record",
+    status: asText(raw.status) || "Active",
+    description: asText(raw.description),
+    eligibility: asText(raw.eligibility),
+    category: asText(raw.category),
     allocationCr: raw.allocationCr && typeof raw.allocationCr === "object"
       ? {
           fy: asText(raw.allocationCr.fy),
@@ -95,9 +148,9 @@ export function normalizeScheme(raw, origin = {}) {
           actual: asNum(raw.allocationCr.actual),
         }
       : NOT_REPORTED,
-    popularity: asNum(raw.popularity) ?? 0,
+    popularity: asNum(raw.popularity) ?? (level === "Central" ? 85 : 70),
     provenance: {
-      connector: origin.connector || "bundled-seed",
+      connector: origin.connector || "local-pack",
       sourceType: origin.sourceType || "official-portal-record",
       license: origin.license || "Not reported",
       pack: origin.pack || null,

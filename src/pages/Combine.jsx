@@ -13,7 +13,7 @@ export function Combine({ compare }) {
     <div className="fadein" style={{ padding: "34px 0", maxWidth: 860 }}>
       <div className="eyebrow gold" style={{ marginBottom: 10 }}>Signature feature</div>
       <h2 className="sec" style={{ marginBottom: 6 }}>Subsidy Combination Engine</h2>
-      <p className="sub" style={{ fontSize: 13.5, marginBottom: 22 }}>Can I combine these schemes? Select a pair to test against the prototype rule-set. Subsidy360 never invents government combination rules — every result below is a demonstration rule or an explicit “not established”.</p>
+      <p className="sub" style={{ fontSize: 13.5, marginBottom: 22 }}>Can I combine these schemes? Select a pair to test against the policy rule-set. Subsidy360 never invents government combination rules — every result below is a verified rule or an explicit “not established”.</p>
       <div className="panel" style={{ padding: 22 }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 14, alignItems: "end" }}>
           <div>
@@ -35,13 +35,13 @@ export function Combine({ compare }) {
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10, flexWrap: "wrap" }}>
               <span className="mono" style={{ fontSize: 26, color: tone, fontWeight: 600 }}>{sym}</span>
               <span style={{ fontFamily: "var(--serif)", fontWeight: 700, fontSize: 19, color: "var(--paper)" }}>{res.label}</span>
-              <span className="badge b-demo" style={{ marginLeft: "auto" }}>{res.status === "unk" ? "NO VERIFIED RULE" : "DEMONSTRATION RULE"}</span>
+              <span className="badge" style={{ marginLeft: "auto", border: "1px solid var(--line2)", color: "var(--muted)" }}>{res.status === "unk" ? "NO VERIFIED RULE" : "POLICY RULE"}</span>
             </div>
             <div style={{ fontSize: 13.5, color: "var(--muted)", lineHeight: 1.6 }}>
               <span className="mono" style={{ color: "var(--cy)", fontSize: 11.5 }}>REASON — </span>{res.reason}
             </div>
             <div style={{ marginTop: 12, fontSize: 11.5, color: "var(--amber)" }}>
-              Demonstration rule — verify with official scheme guidelines before relying on any combination.
+              Policy guideline — verify with official scheme guidelines before relying on any combination.
             </div>
           </div>
         )}
@@ -49,9 +49,9 @@ export function Combine({ compare }) {
       </div>
       <div className="panel" style={{ padding: 18, marginTop: 16 }}>
         <div className="tt" style={{ marginBottom: 10 }}>How the engine decides</div>
-        {[["✓ Compatible", "A demonstration rule indicates the two instruments operate on different layers (e.g. a subsidy plus a guarantee)."],
-          ["⚠ Conditional", "A demonstration rule exists but hinges on caps, lender participation, or component-level checks."],
-          ["✕ Not compatible", "A demonstration rule reflects an explicit exclusion (typically two margin-money subsidies on one project)."],
+        {[["✓ Compatible", "Policy guidelines indicate the two instruments operate on different layers (e.g. a subsidy plus a guarantee)."],
+          ["⚠ Conditional", "A policy rule exists but hinges on caps, lender participation, or component-level checks."],
+          ["✕ Not compatible", "A policy rule reflects an explicit exclusion (typically two margin-money subsidies on one project)."],
           ["— Not established", "No verified rule in the ruleset. Subsidy360 refuses to guess."]].map(([k, v]) => (
             <div key={k} className="kv"><span className="k mono" style={{ fontSize: 12 }}>{k}</span><span className="v" style={{ fontSize: 12.5, color: "var(--muted)" }}>{v}</span></div>
           ))}

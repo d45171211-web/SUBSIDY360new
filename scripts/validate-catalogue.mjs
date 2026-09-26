@@ -1,16 +1,15 @@
 #!/usr/bin/env node
 /* Subsidy360 — offline catalogue audit.
- * Validates every pack in the manifest plus the bundled seed, and reports
+ * Validates every pack in the manifest, and reports
  * exactly which fields are "Not reported" so nobody is tempted to fill them in.
  *   npm run validate:data
  */
 import fs from "node:fs";
 import path from "node:path";
 import { normalizeScheme, validateScheme, REPORTABLE_FIELDS } from "../src/data/schema.js";
-import { SEED_SCHEMES } from "../src/data/seed/verified-seed.js";
 
 const manifest = JSON.parse(fs.readFileSync(path.join("public", "data", "manifest.json"), "utf8"));
-const packs = [{ id: "bundled-seed", records: SEED_SCHEMES, kind: "schemes" }];
+const packs = [];
 
 for (const entry of manifest.packs.filter((p) => p.enabled !== false)) {
   const file = path.join("public", entry.path);
@@ -24,7 +23,9 @@ for (const entry of manifest.packs.filter((p) => p.enabled !== false)) {
     if (interconverted.length) console.log(`   ⚠ ${interconverted.length} row(s) report Actual without BE — check the source document.`);
     continue;
   }
-  packs.push({ id: entry.id, records: json.schemes || json.records || json, kind: "schemes" });
+  let records = Array.isArray(json) ? json : json.schemes || json.records || [];
+  if (Array.isArray(records[0])) records = records.flat();
+  packs.push({ id: entry.id, records, kind: "schemes" });
 }
 
 let total = 0, rejectedTotal = 0;

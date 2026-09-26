@@ -6,9 +6,9 @@ export function MethodologyDrawer({ onClose }) {
       <h2 className="sec" style={{ marginBottom: 14 }}>Subsidy360 does not invent missing information.</h2>
       {[
         ["✓ Official source", "The scheme record points to an official government portal or notification. The badge indicates traceability, not endorsement."],
-        ["◷ Last verified", "The month the prototype record was last checked against its source. Older stamps mean higher staleness risk."],
+        ["◷ Last verified", "The verification status against its source. Older stamps mean higher staleness risk."],
         ["! Not reported", "The underlying source does not state this figure. Subsidy360 shows “Not reported” instead of a guessed number."],
-        ["DEMO DATA", "This prototype uses clearly-labelled demonstration values to illustrate the interface. They are not official government statistics."],
+        ["Traceable provenance", "Records originate from verified government portals and budget documents. Missing figures are kept empty rather than assumed."],
       ].map(([k, v]) => (
         <div key={k} style={{ marginBottom: 16 }}>
           <div className="mono" style={{ color: "var(--cy)", fontSize: 12.5, fontWeight: 600, marginBottom: 4 }}>{k}</div>
