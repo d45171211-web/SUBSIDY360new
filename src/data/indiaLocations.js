@@ -211,11 +211,46 @@ export const INDIA_STATES_AND_DISTRICTS = {
   ]
 };
 
+// State aliases for robust mapping across datasets, census names and user searches
+const STATE_ALIASES = {
+  "jammu and kashmir": "Jammu & Kashmir",
+  "jammu & kashmir": "Jammu & Kashmir",
+  "andaman and nicobar islands": "Andaman & Nicobar Islands",
+  "andaman & nicobar islands": "Andaman & Nicobar Islands",
+  "dadra and nagar haveli and daman and diu": "Dadra & Nagar Haveli and Daman & Diu",
+  "dadra & nagar haveli and daman & diu": "Dadra & Nagar Haveli and Daman & Diu",
+  "daman and diu": "Dadra & Nagar Haveli and Daman & Diu",
+  "dadra and nagar haveli": "Dadra & Nagar Haveli and Daman & Diu",
+  "puducherry": "Puducherry",
+  "pondicherry": "Puducherry",
+  "orissa": "Odisha",
+  "odisha": "Odisha",
+  "uttaranchal": "Uttarakhand",
+  "uttarakhand": "Uttarakhand",
+};
+
+export function normalizeStateName(raw) {
+  if (!raw) return "";
+  const key = String(raw).trim().toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]/g, "");
+  // Check exact or normalized alias
+  for (const [alias, canonical] of Object.entries(STATE_ALIASES)) {
+    const aliasNorm = alias.replace(/&/g, "and").replace(/[^a-z0-9]/g, "");
+    if (key === aliasNorm) return canonical;
+  }
+  // Check in main dataset
+  for (const st of Object.keys(INDIA_STATES_AND_DISTRICTS)) {
+    const stNorm = st.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]/g, "");
+    if (key === stNorm) return st;
+  }
+  return String(raw).trim();
+}
+
 export const ALL_INDIAN_STATES = Object.keys(INDIA_STATES_AND_DISTRICTS);
 
 export function getDistrictsForState(stateName) {
   if (!stateName) return [];
-  return INDIA_STATES_AND_DISTRICTS[stateName] || [];
+  const canonical = normalizeStateName(stateName);
+  return INDIA_STATES_AND_DISTRICTS[canonical] || INDIA_STATES_AND_DISTRICTS[stateName] || [];
 }
 
 export function getAllDistrictsFlattened() {
@@ -227,3 +262,4 @@ export function getAllDistrictsFlattened() {
   }
   return list;
 }
+

@@ -14,9 +14,15 @@ const POPULAR_STATES = [
 export function Eligibility({ go, profile, setProfile }) {
   const { schemes: SCHEMES, states: refStates, facets } = useCatalogue();
   const catalogueStates = refStates.length ? refStates : facets.states.map(s => s.value);
-  // Merge catalogue states with official states/UTs
+  // Merge catalogue states with official states/UTs, filtering out invalid values
   const ALL_STATES = useMemo(() => {
-    const set = new Set([...ALL_INDIAN_STATES, ...catalogueStates]);
+    const set = new Set();
+    for (const s of ALL_INDIAN_STATES) set.add(s);
+    for (const s of catalogueStates) {
+      if (s && s !== "None" && s !== "all" && s !== "All India") {
+        set.add(s);
+      }
+    }
     return Array.from(set).sort((a, b) => a.localeCompare(b));
   }, [catalogueStates]);
 

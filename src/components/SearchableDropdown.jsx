@@ -13,10 +13,10 @@ export function SearchableDropdown({
   emptyMessage = "No matching options found",
   badgeText,
   disabled = false,
-  allowCustom = true,
+  allowCustom = false,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState("");
+  const [search, setSearch] = useState("");
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const containerRef = useRef(null);
   const inputRef = useRef(null);
@@ -36,35 +36,49 @@ export function SearchableDropdown({
     });
   }, [options]);
 
-  // Filtered list
+  // Filtered options: If user is searching, filter. Otherwise show all options!
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = search.trim().toLowerCase();
     if (!q) return normalizedOptions;
     return normalizedOptions.filter(opt =>
       opt.label.toLowerCase().includes(q) ||
       (opt.sub && opt.sub.toLowerCase().includes(q))
     );
-  }, [normalizedOptions, query]);
-
-  // Sync query when value changes from outside or dropdown closes
-  useEffect(() => {
-    if (!isOpen) {
-      setQuery(value || "");
-    }
-  }, [value, isOpen]);
+  }, [normalizedOptions, search]);
 
   // Click outside to close
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
         setIsOpen(false);
+        setSearch("");
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Scroll active item into view
+  // When opening, scroll to currently selected item
+  useEffect(() => {
+    if (isOpen && listRef.current) {
+      if (value) {
+        const selectedIdx = filtered.findIndex(opt => opt.value === value);
+        if (selectedIdx >= 0) {
+          setHighlightIndex(selectedIdx);
+          const items = listRef.current.querySelectorAll(".sdrop-item");
+          if (items[selectedIdx]) {
+            items[selectedIdx].scrollIntoView({ block: "nearest" });
+          }
+        } else {
+          setHighlightIndex(0);
+        }
+      } else {
+        setHighlightIndex(0);
+      }
+    }
+  }, [isOpen]);
+
+  // Scroll highlighted item
   useEffect(() => {
     if (isOpen && highlightIndex >= 0 && listRef.current) {
       const items = listRef.current.querySelectorAll(".sdrop-item");
@@ -76,7 +90,7 @@ export function SearchableDropdown({
 
   const handleSelect = (opt) => {
     onChange(opt.value, opt);
-    setQuery(opt.label);
+    setSearch("");
     setIsOpen(false);
     setHighlightIndex(-1);
   };
@@ -84,7 +98,7 @@ export function SearchableDropdown({
   const handleClear = (e) => {
     e.stopPropagation();
     onChange("", null);
-    setQuery("");
+    setSearch("");
     setHighlightIndex(-1);
     if (inputRef.current) inputRef.current.focus();
   };
@@ -96,7 +110,6 @@ export function SearchableDropdown({
       e.preventDefault();
       if (!isOpen) {
         setIsOpen(true);
-        setHighlightIndex(0);
       } else {
         setHighlightIndex(prev => (prev + 1 < filtered.length ? prev + 1 : 0));
       }
@@ -104,7 +117,6 @@ export function SearchableDropdown({
       e.preventDefault();
       if (!isOpen) {
         setIsOpen(true);
-        setHighlightIndex(filtered.length - 1);
       } else {
         setHighlightIndex(prev => (prev - 1 >= 0 ? prev - 1 : filtered.length - 1));
       }
@@ -112,24 +124,34 @@ export function SearchableDropdown({
       e.preventDefault();
       if (isOpen && highlightIndex >= 0 && highlightIndex < filtered.length) {
         handleSelect(filtered[highlightIndex]);
-      } else if (allowCustom && query.trim()) {
-        // Allow custom entry
-        onChange(query.trim(), { label: query.trim(), value: query.trim() });
+      } else if (allowCustom && search.trim()) {
+        onChange(search.trim(), { label: search.trim(), value: search.trim() });
+        setSearch("");
         setIsOpen(false);
       }
     } else if (e.key === "Escape") {
       setIsOpen(false);
+      setSearch("");
     }
   };
+
+  // Determine current display text in input
+  const displayValue = isOpen ? search : (value || "");
 
   return (
     <div
       ref={containerRef}
       className={`sdrop-container ${disabled ? "sdrop-disabled" : ""}`}
-      style={{ position: "relative", width: "100%", maxWidth: 440 }}
+      style={{ position: "relative", width: "100%", maxWidth: 460 }}
     >
       <div
         className={`sdrop-input-wrap ${isOpen ? "focused" : ""}`}
+        onClick={() => {
+          if (!disabled) {
+            setIsOpen(true);
+            if (inputRef.current) inputRef.current.focus();
+          }
+        }}
         style={{
           display: "flex",
           alignItems: "center",
@@ -137,14 +159,15 @@ export function SearchableDropdown({
           border: `1.5px solid ${isOpen ? "var(--em)" : "var(--line2)"}`,
           borderRadius: 6,
           boxShadow: isOpen ? "0 0 0 3px rgba(123, 155, 125, 0.2)" : "var(--card-shadow)",
-          padding: "3px 10px",
+          padding: "3px 12px",
+          cursor: "pointer",
           transition: "border-color .15s ease, box-shadow .15s ease",
         }}
       >
         <span
           style={{
             color: "var(--muted)",
-            fontSize: 15,
+            fontSize: 14,
             marginRight: 8,
             userSelect: "none",
             display: "inline-flex",
@@ -154,23 +177,20 @@ export function SearchableDropdown({
         >
           🔍
         </span>
+
         <input
           ref={inputRef}
           type="text"
-          value={query}
+          value={displayValue}
           disabled={disabled}
-          placeholder={isOpen ? searchPlaceholder : (value || placeholder)}
+          placeholder={value ? value : placeholder}
           onChange={(e) => {
-            setQuery(e.target.value);
+            setSearch(e.target.value);
             if (!isOpen) setIsOpen(true);
             setHighlightIndex(0);
-            if (allowCustom) {
-              onChange(e.target.value);
-            }
           }}
           onFocus={() => {
             setIsOpen(true);
-            setHighlightIndex(-1);
           }}
           onKeyDown={handleKeyDown}
           style={{
@@ -182,13 +202,14 @@ export function SearchableDropdown({
             font: "500 14px var(--sans)",
             padding: "8px 0",
             minWidth: 0,
+            cursor: "text",
           }}
           aria-label={placeholder}
           aria-expanded={isOpen}
           aria-autocomplete="list"
         />
 
-        {query && (
+        {(value || search) && (
           <button
             type="button"
             onClick={handleClear}
@@ -198,14 +219,14 @@ export function SearchableDropdown({
               color: "var(--muted)",
               cursor: "pointer",
               padding: "4px 6px",
-              fontSize: 13,
+              fontSize: 12,
               borderRadius: "50%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               marginRight: 4,
             }}
-            title="Clear"
+            title="Clear selection"
             aria-label="Clear selection"
           >
             ✕
@@ -214,7 +235,8 @@ export function SearchableDropdown({
 
         <button
           type="button"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             if (!disabled) {
               setIsOpen(o => !o);
               if (!isOpen && inputRef.current) inputRef.current.focus();
@@ -243,8 +265,8 @@ export function SearchableDropdown({
           <span
             className="badge b-official"
             style={{
-              fontSize: 10,
-              padding: "2px 7px",
+              fontSize: 10.5,
+              padding: "2px 8px",
               borderRadius: 3,
             }}
           >
@@ -288,7 +310,7 @@ export function SearchableDropdown({
             }}
           >
             <span>{filtered.length} {filtered.length === 1 ? "OPTION" : "OPTIONS"}</span>
-            <span>PRESS ↵ TO SELECT</span>
+            <span>CLICK OR PRESS ↵</span>
           </div>
 
           {filtered.length === 0 ? (
@@ -301,16 +323,16 @@ export function SearchableDropdown({
               }}
             >
               <div>{emptyMessage}</div>
-              {allowCustom && query.trim() && (
+              {allowCustom && search.trim() && (
                 <button
                   type="button"
                   className="btn sec"
                   onClick={() => {
-                    handleSelect({ label: query.trim(), value: query.trim() });
+                    handleSelect({ label: search.trim(), value: search.trim() });
                   }}
                   style={{ marginTop: 8, fontSize: 12, padding: "5px 10px" }}
                 >
-                  Use &quot;{query.trim()}&quot; anyway
+                  Use &quot;{search.trim()}&quot; anyway
                 </button>
               )}
             </div>
