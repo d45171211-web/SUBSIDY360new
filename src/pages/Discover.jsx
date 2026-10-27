@@ -73,7 +73,7 @@ export function Discover({ go, profile, compare, toggleCompare, query, setQuery 
           <Sel k="state" label="State"><option value="">All states</option>{STATES.map(s => <option key={s}>{s}</option>)}</Sel>
           <Sel k="level" label="Central / State"><option value="">Both</option><option>Central</option><option>State</option></Sel>
           <Sel k="applicant" label="Beneficiary"><option value="">Any</option>{APPLICANTS.map(a => <option key={a.id} value={a.id}>{a.label}</option>)}</Sel>
-          <Sel k="sector" label="Sector"><option value="">Any</option>{SECTORS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}</Sel>
+          <Sel k="sector" label="Support Category"><option value="">All 34 Categories</option>{SECTORS.map(s => <option key={s.id} value={s.id}>{s.num ? `${s.num}. ` : ""}{s.label}</option>)}</Sel>
           <Sel k="ministry" label="Department"><option value="">All departments</option>{ministryOptions.map(m => <option key={m.value} value={m.value}>{m.label} ({m.n})</option>)}</Sel>
           <Sel k="invest" label="Investment size"><option value="">Any</option>{INVEST_BANDS.map(b => <option key={b.id} value={b.id}>{b.label}</option>)}</Sel>
           <Sel k="loan" label="Loan required"><option value="">Any</option><option value="yes">Yes</option><option value="no">No</option></Sel>

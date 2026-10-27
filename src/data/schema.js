@@ -55,17 +55,58 @@ function deriveApplicants(raw) {
   return res.length ? res : ["household"];
 }
 
+const SUPPORT_CATEGORY_RULES = [
+  { id: "solar-renewable-energy", re: /solar|renewable|clean[- ]energy|photovoltaic|biogas|bio[- ]energy|pm[- ]kusum|rooftop solar/i },
+  { id: "health-medical", re: /health|medical|hospital|ayushman|treatment|medicine|doctor|clinic|dialysis|maternity|wellness/i },
+  { id: "agriculture-farmers", re: /agri|farm|crop|kisan|krishi|cultivat|seed|fertiliz|soil|kharif|rabi|pm[- ]kisan/i },
+  { id: "farm-machinery", re: /tractor|power tiller|mechanis|machinery|thresher|rotavator|sprayer|harvester|farm equipment/i },
+  { id: "water-irrigation", re: /irrigation|drip|sprinkler|borewell|water|canal|pond|micro[- ]irrigation|jal jeevan|watershed/i },
+  { id: "housing", re: /housing|awas|shelter|home loan|pradhan mantri awas|indira awas|plot|residential/i },
+  { id: "education-scholarships", re: /education|scholarship|school|college|tuition|student|fellowship|university|degree|coaching/i },
+  { id: "women-girl-child", re: /women|woman|girl|mahila|kanya|beti|widow|maternity|sukanya/i },
+  { id: "child-family-welfare", re: /child|infant|baby|family|anganwadi|nutrition|poshan|matritva|orphan/i },
+  { id: "employment-skill-development", re: /skill|employ|training|vocational|apprentice|rozgar|placement|kaushal|internship/i },
+  { id: "msme-business", re: /msme|micro.*enterprise|small.*enterprise|udyam|prime minister.*employment generation|pmegp|cluster|business/i },
+  { id: "startup-entrepreneurship", re: /startup|entrepreneur|incubat|venture|seed fund|innovation|tbi/i },
+  { id: "small-business-self-employment", re: /self[- ]employ|vendor|hawker|swanidhi|artisan|svanidhi|small business|shopkeeper/i },
+  { id: "animal-husbandry-dairy", re: /dairy|cattle|cow|buffalo|livestock|animal husbandry|poultry|goat|sheep|milk/i },
+  { id: "fisheries", re: /fish|matsya|fisher|aqua|marine|trout|fingerling|pond culture|pradhan mantri matsya sampada/i },
+  { id: "textile-handicrafts", re: /textile|handloom|weaver|craft|artisan|khadi|yarn|silk|spinning|loom/i },
+  { id: "infrastructure", re: /infrastruct|road|bridge|warehouse|cold storage|logistics|industrial park/i },
+  { id: "electricity-energy", re: /electricity|power (?:supply|grid|plant|generation|distribution|tariff|subsidy|saving|utility)|transmission|substation|lighting|discom|ujala|electrical energy/i },
+  { id: "electric-vehicles", re: /electric vehicle|\bev\b|e[- ]rickshaw|e[- ]mobility|charging station|fame/i },
+  { id: "transport-mobility", re: /transport|mobility|bus|rail|rickshaw|passenger|freight|vehicle/i },
+  { id: "rural-development", re: /rural|panchayat|village|gram|nrega|mgnrega|deendayal/i },
+  { id: "urban-development", re: /urban|municip|smart city|city|civic|town/i },
+  { id: "disability-support", re: /disab|handicap|divyang|blind|deaf|pwd|prosthet|hearing/i },
+  { id: "senior-citizen-support", re: /senior citizen|old age|elder|vayo|vridh|pension/i },
+  { id: "financial-inclusion", re: /bank|credit|finance|jan dhan|insurance|bima|suraksha|atm/i },
+  { id: "sc-st-social-welfare", re: /sc\/st|scheduled caste|scheduled tribe|tribal|safai karamchari|backward class|obc|social welfare|minority/i },
+  { id: "manufacturing-industry", re: /manufactur|industrial|factory|production|plant and machinery/i },
+  { id: "environment-climate", re: /environment|climate|forest|pollution|waste|tree|green|afforestation/i },
+  { id: "horticulture-allied-agriculture", re: /horticultur|fruit|vegetable|orchard|flower|floriculture|plantation|spices|herbal/i },
+  { id: "food-consumer-support", re: /food|consumer|ration|pds|grain|cereal|millet|annapurna/i },
+  { id: "interest-loan-subsidies", re: /interest subvention|interest subsidy|term loan|collateral free|credit guarantee|mudra/i },
+  { id: "export-trade-support", re: /export|foreign trade|trade promotion|customs|duty drawback|dgft/i },
+  { id: "cooperative-sector", re: /cooperat|co-operat|sahakar|pacs|society/i },
+  { id: "digital-technology", re: /(?:digital|software|information technology|\bit\b(?=\s*(?:parks?|dept|department|sector|enabled|portal|services?|solution))|broadband|telecom|cyber|artificial intelligence|\bai\b(?=\s*(?:system|tool|tech|model))|electronics|hardware|e-governance|nic\b)/i },
+];
+
 function deriveSectors(raw) {
-  const text = `${raw.category || ""} ${raw.title || ""} ${raw.description || ""}`.toLowerCase();
+  const text = `${raw.category || ""} ${raw.title || ""} ${raw.name || ""} ${raw.short || ""} ${raw.description || ""} ${raw.eligibility || ""} ${raw.benefits || ""} ${raw.dept || ""}`.toLowerCase();
   const res = [];
-  if (/agri|farm|crop|rural|dairy|animal|fisher/i.test(text)) res.push("agriculture");
-  if (/manufactur|textile|industrial|machin|handloom/i.test(text)) res.push("manufacturing");
-  if (/service|transport|tourism|travel|bank|financ|insur/i.test(text)) res.push("services");
-  if (/food|nutrition|cereal|grain|millet/i.test(text)) res.push("food-processing");
-  if (/solar|energy|power|electric/i.test(text)) res.push("energy");
-  if (/trade|trading|retail|export|import/i.test(text)) res.push("trading");
-  if (/housing|shelter|sanitation|utility|health|household|welfare/i.test(text)) res.push("household");
-  return res.length ? res : ["services"];
+  for (const { id, re } of SUPPORT_CATEGORY_RULES) {
+    if (re.test(text)) {
+      res.push(id);
+    }
+  }
+  // Default fallback if no pattern matched
+  if (res.length === 0) {
+    if (/rural|village|farmer|agri/i.test(text)) res.push("agriculture-farmers", "rural-development");
+    else if (/business|unit|industry/i.test(text)) res.push("msme-business");
+    else res.push("employment-skill-development");
+  }
+  return res;
 }
 
 function deriveRestrictions(raw) {

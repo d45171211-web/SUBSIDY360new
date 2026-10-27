@@ -62,22 +62,22 @@ export function matchScheme(s, p) {
     checks.push({ k: "Applicant", state: "na", note: "Not reported" });
   }
 
-  // Sector
+  // Support Category
   if (p.sector) {
     total++;
+    const catObj = SECTORS.find(x => x.id === p.sector);
     const ok = Array.isArray(s.sectors) && (
       s.sectors.includes(p.sector) ||
-      s.sectors.includes("household") ||
       s.sectors.length === 0
     );
     if (ok) pass++;
     checks.push({
-      k: "Sector",
+      k: "Category",
       state: ok ? "ok" : "warn",
-      note: ok ? (SECTORS.find(x => x.id === p.sector)?.label || s.sectorLabel || "Eligible") : (s.sectorLabel || "Other sector")
+      note: ok ? (catObj?.label || s.sectorLabel || "Eligible") : (s.sectorLabel || "Other category")
     });
   } else {
-    checks.push({ k: "Sector", state: "na", note: "Not reported" });
+    checks.push({ k: "Category", state: "na", note: "Not reported" });
   }
 
   // Income

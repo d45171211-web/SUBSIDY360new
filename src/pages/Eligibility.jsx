@@ -11,6 +11,79 @@ const POPULAR_STATES = [
   "Rajasthan", "Delhi", "Madhya Pradesh", "Bihar", "West Bengal", "Telangana"
 ];
 
+const POPULAR_CATEGORIES = [
+  "agriculture-farmers", "msme-business", "solar-renewable-energy",
+  "education-scholarships", "health-medical", "women-girl-child",
+  "startup-entrepreneurship", "animal-husbandry-dairy", "farm-machinery",
+  "employment-skill-development", "housing", "textile-handicrafts",
+];
+
+function CategoryStepSelector({ p, setP }) {
+  const [showAllChips, setShowAllChips] = useState(false);
+  const selectedObj = SECTORS.find(s => s.id === p.sector);
+
+  const categoryOptions = useMemo(() => {
+    return SECTORS.map(s => ({
+      label: `${s.num}. ${s.label}`,
+      value: s.id,
+      sub: s.desc,
+    }));
+  }, []);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.5 }}>
+        Choose from <b>34 Support Categories</b> covering Central and State/UT assistance programmes (grants, loans, subsidies, DBT, pensions, and technical support):
+      </div>
+
+      <SearchableDropdown
+        value={selectedObj ? `${selectedObj.num}. ${selectedObj.label}` : ""}
+        options={categoryOptions}
+        placeholder="Select or search among 34 support categories..."
+        searchPlaceholder="Type category (e.g. Solar, Farm Machinery, Dairy, Education)..."
+        badgeText={selectedObj ? `Selected: ${selectedObj.label}` : "34 Support Categories"}
+        onChange={(selectedVal, opt) => {
+          setP(prev => ({ ...prev, sector: opt?.value || selectedVal }));
+        }}
+      />
+
+      {selectedObj && (
+        <div style={{ padding: "10px 14px", background: "var(--panel2)", borderRadius: 6, border: "1px solid var(--line2)", fontSize: 13 }}>
+          <b style={{ color: "var(--paper)" }}>{selectedObj.num}. {selectedObj.label}</b>: <span style={{ color: "var(--muted)" }}>{selectedObj.desc}</span>
+        </div>
+      )}
+
+      <div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8, flexWrap: "wrap", gap: 6 }}>
+          <span className="tt">{showAllChips ? "All 34 Support Categories:" : "Quick select popular categories:"}</span>
+          <button
+            type="button"
+            className="btn ghost"
+            style={{ fontSize: 11.5, padding: "2px 6px" }}
+            onClick={() => setShowAllChips(s => !s)}
+          >
+            {showAllChips ? "Show popular only" : "View all 34 category chips"}
+          </button>
+        </div>
+
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, maxHeight: showAllChips ? 280 : "none", overflowY: showAllChips ? "auto" : "visible", padding: "2px 0" }}>
+          {(showAllChips ? SECTORS : SECTORS.filter(s => POPULAR_CATEGORIES.includes(s.id))).map(item => (
+            <button
+              key={item.id}
+              type="button"
+              className={`chip ${p.sector === item.id ? "on" : ""}`}
+              onClick={() => setP(prev => ({ ...prev, sector: item.id }))}
+              title={item.desc}
+            >
+              {item.num}. {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Eligibility({ go, profile, setProfile }) {
   const { schemes: SCHEMES, states: refStates, facets } = useCatalogue();
   const catalogueStates = refStates.length ? refStates : facets.states.map(s => s.value);
@@ -153,10 +226,11 @@ export function Eligibility({ go, profile, setProfile }) {
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
         {APPLICANTS.map(a => <button key={a.id} className={`chip ${p.applicant === a.id ? "on" : ""}`} onClick={() => setP({ ...p, applicant: a.id })}>{a.label}</button>)}
       </div>) },
-    { key: "sector", q: "Which sector is your need in?", render: () => (
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-        {SECTORS.map(s => <button key={s.id} className={`chip ${p.sector === s.id ? "on" : ""}`} onClick={() => setP({ ...p, sector: s.id })}>{s.label}</button>)}
-      </div>) },
+    {
+      key: "sector",
+      q: "Which support category is your need in?",
+      render: () => <CategoryStepSelector p={p} setP={setP} />,
+    },
     { key: "income", q: "Annual household income range?", render: () => (
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
         {INCOME_BANDS.map(b => <button key={b.id} className={`chip ${p.income === b.id ? "on" : ""}`} onClick={() => setP({ ...p, income: b.id })}>{b.label}</button>)}
@@ -206,10 +280,11 @@ export function Eligibility({ go, profile, setProfile }) {
                 <div className="tt" style={{ marginBottom: 4 }}>Top-ranked scheme for your profile</div>
                 <div style={{ fontFamily: "var(--serif)", fontWeight: 700, fontSize: 20, color: "var(--paper)" }}>{top.s.short}</div>
                 <div style={{ fontSize: 12.5, color: "var(--muted)", margin: "3px 0 8px" }}>{top.s.name}</div>
-                {(p.state || p.district) && (
+                {(p.state || p.district || p.sector) && (
                   <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
                     {p.state && <span className="badge b-official">📍 {p.state}</span>}
                     {p.district && <span className="badge b-verified">{p.district}</span>}
+                    {p.sector && <span className="badge b-central">🏷️ {SECTORS.find(s => s.id === p.sector)?.label || p.sector}</span>}
                   </div>
                 )}
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
