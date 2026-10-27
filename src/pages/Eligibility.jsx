@@ -302,7 +302,8 @@ export function Eligibility({ go, profile, setProfile }) {
               scheme={top.s}
               match={top.m}
               profile={p}
-              onOpenIntel={() => go("intel", top.s.id)}
+              onOpenIntel={(id) => go("intel", id || top.s.id)}
+              onSelectScheme={(id) => go("intel", id)}
             />
           </div>
           <div>

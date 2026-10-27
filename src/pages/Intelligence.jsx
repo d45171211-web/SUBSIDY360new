@@ -3,6 +3,7 @@ import { matchScheme } from "../engine/matching.js";
 import { fmtL, fmtCr, appLabel } from "../engine/format.js";
 import { LevelBadge } from "../components/LevelBadge.jsx";
 import { Check } from "../components/Check.jsx";
+import { SelfEligibilityChecklist } from "../components/SelfEligibilityChecklist.jsx";
 
 export function Intelligence({ schemeId, go, profile, setSchemeId }) {
   const { schemes: SCHEMES, budget } = useCatalogue();
@@ -87,16 +88,12 @@ export function Intelligence({ schemeId, go, profile, setSchemeId }) {
             </div>
           </div>
 
-          <div className="panel" style={{ padding: 20 }}>
-            <div className="tt" style={{ marginBottom: 10 }}>Important restrictions & eligibility</div>
-            {s.restrictions.length === 0 && !s.eligibility ? (
-              <div style={{ fontSize: 13, color: "var(--muted)" }}>
-                Standard departmental eligibility rules apply. Open to all applicants meeting the location and category criteria with no reported special exclusions.
-              </div>
-            ) : (
-              s.restrictions.map(r => <div key={r} style={{ display: "flex", gap: 9, fontSize: 13.5, padding: "5px 0", color: "var(--muted)" }}><span style={{ color: "var(--amber)" }}>⚠</span>{r}</div>)
-            )}
-          </div>
+          <SelfEligibilityChecklist
+            scheme={s}
+            match={m}
+            profile={profile}
+            onSelectScheme={(id) => setSchemeId(id)}
+          />
 
           <div className="panel" style={{ padding: 20 }}>
             <div className="tt" style={{ marginBottom: 10 }}>Financial information</div>
