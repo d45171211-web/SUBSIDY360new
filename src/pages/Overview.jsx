@@ -68,11 +68,11 @@ export function Overview({ go, setQuery }) {
             <div style={{ height: 240 }}>
               <ResponsiveContainer>
                 <BarChart data={[...SCHEMES].sort((a, b) => b.popularity - a.popularity).slice(0, 6).map(s => ({ n: s.short, v: s.popularity }))} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
-                  <CartesianGrid stroke="#224637" strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="n" tick={{ fill: "#9EB7A7", fontSize: 10.5, fontFamily: "IBM Plex Mono" }} interval={0} angle={-14} dy={8} height={44} axisLine={{ stroke: "#224637" }} tickLine={false} />
-                  <YAxis tick={{ fill: "#6F8F7C", fontSize: 10.5 }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ background: "#142E23", border: "1px solid #2D5B47", borderRadius: 4, fontSize: 12 }} labelStyle={{ color: "#EAE6DD" }} cursor={{ fill: "rgba(200,182,226,.08)" }} />
-                  <Bar dataKey="v" name="Interest index" fill="#98DC7E" radius={[2, 2, 0, 0]} maxBarSize={38} />
+                  <CartesianGrid stroke="var(--line)" strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="n" tick={{ fill: "var(--muted)", fontSize: 10.5, fontFamily: "IBM Plex Mono" }} interval={0} angle={-14} dy={8} height={44} axisLine={{ stroke: "var(--line)" }} tickLine={false} />
+                  <YAxis tick={{ fill: "var(--muted2)", fontSize: 10.5 }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ background: "var(--panel)", border: "1px solid var(--line2)", borderRadius: 4, fontSize: 12 }} labelStyle={{ color: "var(--paper)" }} cursor={{ fill: "rgba(123,155,125,.1)" }} />
+                  <Bar dataKey="v" name="Interest index" fill="var(--sage)" radius={[2, 2, 0, 0]} maxBarSize={38} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

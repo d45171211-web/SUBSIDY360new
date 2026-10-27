@@ -43,9 +43,9 @@ export function SchemeCard({ s, profile, onOpen, onCompare, inCompare }) {
 
       <div
         style={{
-          borderLeft: "3px solid var(--cy)",
-          background: "rgba(200, 182, 226, 0.05)",
-          padding: "8px 12px",
+          borderLeft: "3px solid var(--sage)",
+          background: "var(--panel2)",
+          padding: "9px 12px",
           borderRadius: "0 6px 6px 0",
           fontSize: 13,
           color: s.benefit ? "var(--txt)" : "var(--muted2)",
@@ -61,7 +61,7 @@ export function SchemeCard({ s, profile, onOpen, onCompare, inCompare }) {
           gridTemplateColumns: "minmax(0, 1.2fr) minmax(0, 1fr)",
           gap: "8px 14px",
           fontSize: 12,
-          background: "rgba(10, 22, 18, 0.45)",
+          background: "var(--bg2)",
           padding: "10px 12px",
           borderRadius: "6px",
           border: "1px solid var(--line)",
@@ -123,7 +123,7 @@ export function SchemeCard({ s, profile, onOpen, onCompare, inCompare }) {
           style={{
             padding: inCompare ? "6px 12px" : "6px 8px",
             fontSize: 12.5,
-            color: inCompare ? "#0A1612" : "var(--cy)",
+            color: inCompare ? "var(--em-txt, #FAF9F5)" : "var(--cy)",
             marginLeft: "auto",
           }}
           onClick={() => onCompare(s.id)}
