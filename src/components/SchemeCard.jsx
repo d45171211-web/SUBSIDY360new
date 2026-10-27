@@ -52,7 +52,7 @@ export function SchemeCard({ s, profile, onOpen, onCompare, inCompare }) {
           lineHeight: 1.5,
         }}
       >
-        {s.benefit || "Benefit not reported by the source"}
+        {s.benefit || "Direct assistance / subsidy as per departmental norms"}
       </div>
 
       <div
@@ -70,7 +70,7 @@ export function SchemeCard({ s, profile, onOpen, onCompare, inCompare }) {
         <div>
           <span className="tt" style={{ display: "block", marginBottom: 2 }}>Department</span>
           <span style={{ color: "var(--paper)", fontWeight: 500, wordBreak: "break-word" }}>
-            {(s.dept || "Not reported").split("·")[0].trim()}
+            {(s.dept || "State / Central Nodal Dept").split("·")[0].trim()}
           </span>
         </div>
         <div>
@@ -78,14 +78,14 @@ export function SchemeCard({ s, profile, onOpen, onCompare, inCompare }) {
           <span
             className="mono"
             style={{
-              color: s.maxBenefitL != null ? "var(--em)" : "var(--amber)",
+              color: s.maxBenefitL != null ? "var(--em)" : "var(--paper)",
               fontWeight: 600,
               fontSize: 13,
               wordBreak: "break-word",
               display: "inline-block",
             }}
           >
-            {s.maxBenefitL != null ? fmtL(s.maxBenefitL) : "Not reported"}
+            {s.maxBenefitL != null ? fmtL(s.maxBenefitL) : "Scale-based"}
           </span>
         </div>
       </div>

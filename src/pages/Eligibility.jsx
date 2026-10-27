@@ -4,6 +4,7 @@ import { useCatalogue } from "../context/CatalogueContext.jsx";
 import { matchScheme } from "../engine/matching.js";
 import { Check } from "../components/Check.jsx";
 import { SearchableDropdown } from "../components/SearchableDropdown.jsx";
+import { SelfEligibilityChecklist } from "../components/SelfEligibilityChecklist.jsx";
 import { ALL_INDIAN_STATES, getDistrictsForState, getAllDistrictsFlattened } from "../data/indiaLocations.js";
 
 const POPULAR_STATES = [
@@ -297,9 +298,12 @@ export function Eligibility({ go, profile, setProfile }) {
               <div className="tt" style={{ padding: "10px 0 4px" }}>Transparent breakdown — {top.s.short}</div>
               {top.m.checks.map(c => <Check key={c.k} c={c} />)}
             </div>
-            <div className="badge b-nr" style={{ marginTop: 14, padding: "8px 12px", fontSize: 10.5, lineHeight: 1.5, textTransform: "none", letterSpacing: ".04em" }}>
-              Subsidy360 informational match — not an official eligibility decision.
-            </div>
+            <SelfEligibilityChecklist
+              scheme={top.s}
+              match={top.m}
+              profile={p}
+              onOpenIntel={() => go("intel", top.s.id)}
+            />
           </div>
           <div>
             <div className="tt" style={{ marginBottom: 10 }}>Top {Math.min(40, ranked.length)} of {ranked.length.toLocaleString("en-IN")} schemes ranked against your profile</div>

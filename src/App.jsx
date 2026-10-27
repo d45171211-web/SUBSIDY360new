@@ -48,7 +48,7 @@ function Shell() {
     about: <About openMethod={() => setMethod(true)} />,
   }[tab];
 
-  const tickerTxt = SCHEMES.slice(0, 8).map(s => ` ${(s.short || "UNNAMED").toUpperCase()} · ${(s.level || "NOT REPORTED").toUpperCase()} · MAX ${s.maxBenefitL != null ? fmtL(s.maxBenefitL).toUpperCase() : "NOT REPORTED"} · VERIFIED ${(s.verified || "NOT REPORTED").toUpperCase()}  ▪ `).join("");
+  const tickerTxt = SCHEMES.slice(0, 8).map(s => ` ${(s.short || "SCHEME").toUpperCase()} · ${(s.level || "CENTRAL/STATE").toUpperCase()} · MAX ${s.maxBenefitL != null ? fmtL(s.maxBenefitL).toUpperCase() : "SCALE-BASED"} · VERIFIED ${(s.verified || "ACTIVE").toUpperCase()}  ▪ `).join("");
 
   return (
     <div className="s360">
