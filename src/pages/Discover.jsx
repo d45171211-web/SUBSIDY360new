@@ -49,7 +49,7 @@ export function Discover({ go, profile, compare, toggleCompare, query, setQuery 
   const pages = Math.max(1, Math.ceil(rows.length / PER));
   const view = rows.slice((page - 1) * PER, page * PER);
   const Sel = ({ k, label, children }) => (
-    <div>
+    <div style={{ minWidth: 0 }}>
       <label className="tt" style={{ display: "block", marginBottom: 5 }}>{label}</label>
       <select className="sel" value={f[k]} onChange={e => setF({ ...f, [k]: e.target.value })}>{children}</select>
     </div>
@@ -69,7 +69,7 @@ export function Discover({ go, profile, compare, toggleCompare, query, setQuery 
       </div>
 
       <div className="panel" style={{ padding: 16, marginBottom: 18 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 12 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 140px), 1fr))", gap: 12 }}>
           <Sel k="state" label="State"><option value="">All states</option>{STATES.map(s => <option key={s}>{s}</option>)}</Sel>
           <Sel k="level" label="Central / State"><option value="">Both</option><option>Central</option><option>State</option></Sel>
           <Sel k="applicant" label="Beneficiary"><option value="">Any</option>{APPLICANTS.map(a => <option key={a.id} value={a.id}>{a.label}</option>)}</Sel>

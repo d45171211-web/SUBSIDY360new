@@ -37,6 +37,10 @@ export function Compare({ compare, toggleCompare, go }) {
         </div>
       ) : (
         <>
+          <div className="tt" style={{ marginBottom: 6, display: "flex", justifyContent: "space-between" }}>
+            <span>Attribute comparison</span>
+            <span style={{ color: "var(--muted2)" }}>↔ Swipe horizontally to compare</span>
+          </div>
           <div className="cmp-wrap panel" style={{ padding: 0 }}>
             <table className="cmp">
               <thead><tr><th style={{ width: 170 }}>Attribute</th>{picked.map(s => <th key={s.id}>{s.short}<div style={{ marginTop: 5 }}><LevelBadge level={s.level} /></div></th>)}</tr></thead>
@@ -54,7 +58,7 @@ export function Compare({ compare, toggleCompare, go }) {
             <p style={{ fontSize: 12, color: "var(--muted2)", marginBottom: 10 }}>Schemes without a reported cash ceiling are shown at zero and flagged “Not reported” — they are not lesser schemes, just differently structured.</p>
             <div style={{ height: 220 }}>
               <ResponsiveContainer>
-                <BarChart data={picked.map(s => ({ n: s.short, v: s.maxBenefitL ?? 0, nr: s.maxBenefitL == null }))} margin={{ top: 4, right: 8, left: -14, bottom: 0 }}>
+                <BarChart data={picked.map(s => ({ n: s.short, v: s.maxBenefitL ?? 0, nr: s.maxBenefitL == null }))} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
                   <CartesianGrid stroke="#1D3050" strokeDasharray="3 3" vertical={false} />
                   <XAxis dataKey="n" tick={{ fill: "#8496B4", fontSize: 11, fontFamily: "IBM Plex Mono" }} axisLine={{ stroke: "#1D3050" }} tickLine={false} />
                   <YAxis tick={{ fill: "#5F6F8E", fontSize: 11 }} axisLine={false} tickLine={false} />

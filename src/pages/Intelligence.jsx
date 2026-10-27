@@ -32,12 +32,12 @@ export function Intelligence({ schemeId, go, profile, setSchemeId }) {
           <div className="panel" style={{ padding: 20 }}>
             <div className="tt" style={{ marginBottom: 8 }}>Overview & benefit</div>
             <p style={{ fontSize: 14.5 }}>{s.benefit ? `${s.benefit}.` : "Benefit details not reported by the source. Verify on the official portal below."}</p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: 12, marginTop: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%, 150px), 1fr))", gap: 12, marginTop: 16 }}>
               {[["Benefit type", s.benefitType || "Not reported"], ["Maximum support", s.maxBenefitL != null ? fmtL(s.maxBenefitL) : "Not reported"],
                 ["Who can benefit", s.applicants.length ? s.applicants.map(appLabel).join(", ") : "Not reported"], ["Availability", s.states === "all" ? "All India" : (s.states.join(", ") || "Not reported")]].map(([k, v]) => (
-                <div key={k} style={{ borderLeft: "2px solid var(--line2)", paddingLeft: 12 }}>
+                <div key={k} style={{ borderLeft: "2px solid var(--line2)", paddingLeft: 12, minWidth: 0 }}>
                   <div className="tt" style={{ marginBottom: 3 }}>{k}</div>
-                  <div style={{ fontSize: 13.5, color: k === "Maximum support" && s.maxBenefitL != null ? "var(--gold)" : "var(--txt)", fontWeight: k === "Maximum support" ? 600 : 400 }} className={k === "Maximum support" ? "mono" : ""}>{v}</div>
+                  <div style={{ fontSize: 13.5, color: k === "Maximum support" && s.maxBenefitL != null ? "var(--gold)" : "var(--txt)", fontWeight: k === "Maximum support" ? 600 : 400, wordBreak: "break-word" }} className={k === "Maximum support" ? "mono" : ""}>{v}</div>
                 </div>
               ))}
             </div>

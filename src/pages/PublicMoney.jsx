@@ -26,15 +26,15 @@ export function PublicMoney({ openMethod }) {
         BE = Budget Estimate · RE = Revised Estimate · Actual = actual expenditure. An allocation is never restated as sanctioned, released or utilised unless the source reports it.
       </p>
 
-      <div className="grid-cards" style={{ gridTemplateColumns: "1.2fr 1fr" }}>
+      <div className="grid-public-money">
         <div className="panel" style={{ padding: 20 }}>
           <div className="tt" style={{ marginBottom: 4 }}>BE by scheme, FY 2025-26 (₹ crore)</div>
-          <div style={{ height: 280, marginTop: 10 }}>
+          <div style={{ height: Math.max(300, Math.min(withAlloc.length * 30, 480)), marginTop: 10 }}>
             <ResponsiveContainer>
-              <BarChart data={withAlloc.map(({ s, a }) => ({ n: s.short, BE: a.be }))} layout="vertical" margin={{ top: 0, right: 24, left: 8, bottom: 0 }}>
+              <BarChart data={withAlloc.map(({ s, a }) => ({ n: s.short, BE: a.be }))} layout="vertical" margin={{ top: 0, right: 24, left: 0, bottom: 0 }}>
                 <CartesianGrid stroke="#1D3050" strokeDasharray="3 3" horizontal={false} />
                 <XAxis type="number" tick={{ fill: "#5F6F8E", fontSize: 10.5 }} axisLine={false} tickLine={false} />
-                <YAxis type="category" dataKey="n" width={110} tick={{ fill: "#8496B4", fontSize: 10.5, fontFamily: "IBM Plex Mono" }} axisLine={{ stroke: "#1D3050" }} tickLine={false} />
+                <YAxis type="category" dataKey="n" width={125} tick={{ fill: "#8496B4", fontSize: 10.5, fontFamily: "IBM Plex Mono" }} axisLine={{ stroke: "#1D3050" }} tickLine={false} />
                 <Tooltip contentStyle={{ background: "#0E1B33", border: "1px solid #28406B", borderRadius: 4, fontSize: 12 }} formatter={v => [`₹${v.toLocaleString("en-IN")} Cr`, "BE 2025-26"]} cursor={{ fill: "rgba(216,169,69,.06)" }} />
                 <Bar dataKey="BE" fill="#D8A945" radius={[0, 2, 2, 0]} maxBarSize={22} />
               </BarChart>
@@ -84,7 +84,7 @@ export function PublicMoney({ openMethod }) {
         <p style={{ fontSize: 11.5, color: "var(--muted2)", marginBottom: 10 }}>Lines stop where the underlying figure is not yet reported — gaps are honest, not missing data errors.</p>
         <div style={{ height: 260 }}>
           <ResponsiveContainer>
-            <LineChart data={trend} margin={{ top: 6, right: 18, left: -14, bottom: 0 }}>
+            <LineChart data={trend} margin={{ top: 6, right: 18, left: 6, bottom: 0 }}>
               <CartesianGrid stroke="#1D3050" strokeDasharray="3 3" />
               <XAxis dataKey="fy" tick={{ fill: "#8496B4", fontSize: 11, fontFamily: "IBM Plex Mono" }} axisLine={{ stroke: "#1D3050" }} tickLine={false} />
               <YAxis tick={{ fill: "#5F6F8E", fontSize: 11 }} axisLine={false} tickLine={false} />

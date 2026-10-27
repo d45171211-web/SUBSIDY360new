@@ -15,14 +15,14 @@ export function Combine({ compare }) {
       <h2 className="sec" style={{ marginBottom: 6 }}>Subsidy Combination Engine</h2>
       <p className="sub" style={{ fontSize: 13.5, marginBottom: 22 }}>Can I combine these schemes? Select a pair to test against the policy rule-set. Subsidy360 never invents government combination rules — every result below is a verified rule or an explicit “not established”.</p>
       <div className="panel" style={{ padding: 22 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 14, alignItems: "end" }}>
+        <div className="combine-grid">
           <div>
             <label className="tt" style={{ display: "block", marginBottom: 6 }}>Scheme A</label>
             <select className="sel" value={a} onChange={e => setA(e.target.value)}>
               <option value="">Select scheme…</option>{SCHEMES.map(s => <option key={s.id} value={s.id}>{s.short}</option>)}
             </select>
           </div>
-          <div className="mono" style={{ color: "var(--gold)", fontSize: 22, paddingBottom: 8 }}>+</div>
+          <div className="combine-plus mono" style={{ color: "var(--gold)", fontSize: 22, paddingBottom: 8 }}>+</div>
           <div>
             <label className="tt" style={{ display: "block", marginBottom: 6 }}>Scheme B</label>
             <select className="sel" value={b} onChange={e => setB(e.target.value)}>

@@ -17,10 +17,10 @@ export function SchemeCard({ s, profile, onOpen, onCompare, inCompare }) {
         <div style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 3 }}>{s.name}</div>
       </div>
       <div style={{ fontSize: 13.5, color: s.benefit ? "var(--txt)" : "var(--muted2)" }}>{s.benefit || "Benefit not reported by the source"}</div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 14px", fontSize: 12 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)", gap: "4px 14px", fontSize: 12 }}>
         <span style={{ color: "var(--muted2)" }}>Department</span><span style={{ color: "var(--muted2)" }}>Max benefit</span>
-        <span style={{ color: "var(--txt)" }}>{(s.dept || "Not reported").split("·")[0].trim()}</span>
-        <span className="mono" style={{ color: s.maxBenefitL != null ? "var(--gold)" : "var(--amber)", fontWeight: 600 }}>
+        <span style={{ color: "var(--txt)", wordBreak: "break-word" }}>{(s.dept || "Not reported").split("·")[0].trim()}</span>
+        <span className="mono" style={{ color: s.maxBenefitL != null ? "var(--gold)" : "var(--amber)", fontWeight: 600, wordBreak: "break-word" }}>
           {s.maxBenefitL != null ? fmtL(s.maxBenefitL) : "Not reported"}
         </span>
       </div>

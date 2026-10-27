@@ -67,7 +67,7 @@ export function Overview({ go, setQuery }) {
             </p>
             <div style={{ height: 240 }}>
               <ResponsiveContainer>
-                <BarChart data={[...SCHEMES].sort((a, b) => b.popularity - a.popularity).slice(0, 6).map(s => ({ n: s.short, v: s.popularity }))} margin={{ top: 4, right: 8, left: -18, bottom: 0 }}>
+                <BarChart data={[...SCHEMES].sort((a, b) => b.popularity - a.popularity).slice(0, 6).map(s => ({ n: s.short, v: s.popularity }))} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
                   <CartesianGrid stroke="#1D3050" strokeDasharray="3 3" vertical={false} />
                   <XAxis dataKey="n" tick={{ fill: "#8496B4", fontSize: 10.5, fontFamily: "IBM Plex Mono" }} interval={0} angle={-14} dy={8} height={44} axisLine={{ stroke: "#1D3050" }} tickLine={false} />
                   <YAxis tick={{ fill: "#5F6F8E", fontSize: 10.5 }} axisLine={false} tickLine={false} />
