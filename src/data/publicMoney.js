@@ -8,8 +8,8 @@ export const BUDGET_TREND = [
 ];
 
 export const SECTOR_SPLIT = [
-  { name: "Agriculture & insurance", v: 15742, c: "#17C787" },
-  { name: "Renewable energy", v: 22600, c: "#3BC9E8" },
-  { name: "MSME & enterprise", v: 3500, c: "#D8A945" },
-  { name: "Food processing", v: 1200, c: "#B7A6E8" },
+  { name: "Agriculture & insurance", v: 15742, c: "#98DC7E" },
+  { name: "Renewable energy", v: 22600, c: "#C8B6E2" },
+  { name: "MSME & enterprise", v: 3500, c: "#E2CF9D" },
+  { name: "Food processing", v: 1200, c: "#5E9C7E" },
 ];

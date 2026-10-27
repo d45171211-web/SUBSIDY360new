@@ -59,11 +59,11 @@ export function Compare({ compare, toggleCompare, go }) {
             <div style={{ height: 220 }}>
               <ResponsiveContainer>
                 <BarChart data={picked.map(s => ({ n: s.short, v: s.maxBenefitL ?? 0, nr: s.maxBenefitL == null }))} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
-                  <CartesianGrid stroke="#1D3050" strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="n" tick={{ fill: "#8496B4", fontSize: 11, fontFamily: "IBM Plex Mono" }} axisLine={{ stroke: "#1D3050" }} tickLine={false} />
-                  <YAxis tick={{ fill: "#5F6F8E", fontSize: 11 }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ background: "#0E1B33", border: "1px solid #28406B", borderRadius: 4, fontSize: 12 }} formatter={(v, n, pr) => pr.payload.nr ? ["Not reported", "Max benefit"] : [`₹${v} lakh`, "Max benefit"]} cursor={{ fill: "rgba(216,169,69,.06)" }} />
-                  <Bar dataKey="v" fill="#D8A945" radius={[2, 2, 0, 0]} maxBarSize={54} />
+                  <CartesianGrid stroke="#224637" strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="n" tick={{ fill: "#9EB7A7", fontSize: 11, fontFamily: "IBM Plex Mono" }} axisLine={{ stroke: "#224637" }} tickLine={false} />
+                  <YAxis tick={{ fill: "#6F8F7C", fontSize: 11 }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ background: "#142E23", border: "1px solid #2D5B47", borderRadius: 4, fontSize: 12 }} formatter={(v, n, pr) => pr.payload.nr ? ["Not reported", "Max benefit"] : [`₹${v} lakh`, "Max benefit"]} cursor={{ fill: "rgba(200,182,226,.08)" }} />
+                  <Bar dataKey="v" fill="#98DC7E" radius={[2, 2, 0, 0]} maxBarSize={54} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

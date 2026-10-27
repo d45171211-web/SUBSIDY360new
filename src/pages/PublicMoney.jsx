@@ -32,11 +32,11 @@ export function PublicMoney({ openMethod }) {
           <div style={{ height: Math.max(300, Math.min(withAlloc.length * 30, 480)), marginTop: 10 }}>
             <ResponsiveContainer>
               <BarChart data={withAlloc.map(({ s, a }) => ({ n: s.short, BE: a.be }))} layout="vertical" margin={{ top: 0, right: 24, left: 0, bottom: 0 }}>
-                <CartesianGrid stroke="#1D3050" strokeDasharray="3 3" horizontal={false} />
-                <XAxis type="number" tick={{ fill: "#5F6F8E", fontSize: 10.5 }} axisLine={false} tickLine={false} />
-                <YAxis type="category" dataKey="n" width={125} tick={{ fill: "#8496B4", fontSize: 10.5, fontFamily: "IBM Plex Mono" }} axisLine={{ stroke: "#1D3050" }} tickLine={false} />
-                <Tooltip contentStyle={{ background: "#0E1B33", border: "1px solid #28406B", borderRadius: 4, fontSize: 12 }} formatter={v => [`₹${v.toLocaleString("en-IN")} Cr`, "BE 2025-26"]} cursor={{ fill: "rgba(216,169,69,.06)" }} />
-                <Bar dataKey="BE" fill="#D8A945" radius={[0, 2, 2, 0]} maxBarSize={22} />
+                <CartesianGrid stroke="#224637" strokeDasharray="3 3" horizontal={false} />
+                <XAxis type="number" tick={{ fill: "#6F8F7C", fontSize: 10.5 }} axisLine={false} tickLine={false} />
+                <YAxis type="category" dataKey="n" width={125} tick={{ fill: "#9EB7A7", fontSize: 10.5, fontFamily: "IBM Plex Mono" }} axisLine={{ stroke: "#224637" }} tickLine={false} />
+                <Tooltip contentStyle={{ background: "#142E23", border: "1px solid #2D5B47", borderRadius: 4, fontSize: 12 }} formatter={v => [`₹${v.toLocaleString("en-IN")} Cr`, "BE 2025-26"]} cursor={{ fill: "rgba(200,182,226,.08)" }} />
+                <Bar dataKey="BE" fill="#98DC7E" radius={[0, 2, 2, 0]} maxBarSize={22} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -48,10 +48,10 @@ export function PublicMoney({ openMethod }) {
           <div style={{ height: 240, marginTop: 6 }}>
             <ResponsiveContainer>
               <PieChart>
-                <Pie data={split} dataKey="v" nameKey="name" innerRadius="55%" outerRadius="82%" paddingAngle={2} stroke="#0A1428">
+                <Pie data={split} dataKey="v" nameKey="name" innerRadius="55%" outerRadius="82%" paddingAngle={2} stroke="#0F241C">
                   {split.map(e => <Cell key={e.name} fill={e.c} />)}
                 </Pie>
-                <Tooltip contentStyle={{ background: "#0E1B33", border: "1px solid #28406B", borderRadius: 4, fontSize: 12 }} formatter={v => `₹${v.toLocaleString("en-IN")} Cr`} />
+                <Tooltip contentStyle={{ background: "#142E23", border: "1px solid #2D5B47", borderRadius: 4, fontSize: 12 }} formatter={v => `₹${v.toLocaleString("en-IN")} Cr`} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -85,14 +85,14 @@ export function PublicMoney({ openMethod }) {
         <div style={{ height: 260 }}>
           <ResponsiveContainer>
             <LineChart data={trend} margin={{ top: 6, right: 18, left: 6, bottom: 0 }}>
-              <CartesianGrid stroke="#1D3050" strokeDasharray="3 3" />
-              <XAxis dataKey="fy" tick={{ fill: "#8496B4", fontSize: 11, fontFamily: "IBM Plex Mono" }} axisLine={{ stroke: "#1D3050" }} tickLine={false} />
-              <YAxis tick={{ fill: "#5F6F8E", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={{ background: "#0E1B33", border: "1px solid #28406B", borderRadius: 4, fontSize: 12 }} formatter={(v, n) => [v == null ? "Not reported" : `₹${v}k Cr`, n]} />
+              <CartesianGrid stroke="#224637" strokeDasharray="3 3" />
+              <XAxis dataKey="fy" tick={{ fill: "#9EB7A7", fontSize: 11, fontFamily: "IBM Plex Mono" }} axisLine={{ stroke: "#224637" }} tickLine={false} />
+              <YAxis tick={{ fill: "#6F8F7C", fontSize: 11 }} axisLine={false} tickLine={false} />
+              <Tooltip contentStyle={{ background: "#142E23", border: "1px solid #2D5B47", borderRadius: 4, fontSize: 12 }} formatter={(v, n) => [v == null ? "Not reported" : `₹${v}k Cr`, n]} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Line type="monotone" dataKey="be" name="BE" stroke="#D8A945" strokeWidth={2} dot={{ r: 3 }} connectNulls={false} />
-              <Line type="monotone" dataKey="re" name="RE" stroke="#3BC9E8" strokeWidth={2} dot={{ r: 3 }} connectNulls={false} />
-              <Line type="monotone" dataKey="actual" name="Actual" stroke="#17C787" strokeWidth={2} dot={{ r: 3 }} connectNulls={false} />
+              <Line type="monotone" dataKey="be" name="BE" stroke="#E2CF9D" strokeWidth={2} dot={{ r: 3 }} connectNulls={false} />
+              <Line type="monotone" dataKey="re" name="RE" stroke="#C8B6E2" strokeWidth={2} dot={{ r: 3 }} connectNulls={false} />
+              <Line type="monotone" dataKey="actual" name="Actual" stroke="#98DC7E" strokeWidth={2} dot={{ r: 3 }} connectNulls={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>
