@@ -2,3 +2,22 @@ node_modules
 dist
 .DS_Store
 *.local
+
+# GSD (Get Shit Done) framework files
+.gsd/
+.agent/
+.agents/
+.gemini/
+adapters/
+GSD-STYLE.md
+PROJECT_RULES.md
+VERSION
+model_capabilities.yaml
+scripts/search_repo.*
+scripts/setup_search.*
+scripts/validate-agents.*
+scripts/validate-all.*
+scripts/validate-encoding.*
+scripts/validate-skills.*
+scripts/validate-templates.*
+scripts/validate-workflows.*
