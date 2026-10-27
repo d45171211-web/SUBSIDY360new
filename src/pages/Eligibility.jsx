@@ -3,19 +3,146 @@ import { APPLICANTS, SECTORS, INCOME_BANDS, INVEST_BANDS } from "../data/constan
 import { useCatalogue } from "../context/CatalogueContext.jsx";
 import { matchScheme } from "../engine/matching.js";
 import { Check } from "../components/Check.jsx";
+import { SearchableDropdown } from "../components/SearchableDropdown.jsx";
+import { ALL_INDIAN_STATES, getDistrictsForState, getAllDistrictsFlattened } from "../data/indiaLocations.js";
+
+const POPULAR_STATES = [
+  "Gujarat", "Maharashtra", "Uttar Pradesh", "Karnataka", "Tamil Nadu",
+  "Rajasthan", "Delhi", "Madhya Pradesh", "Bihar", "West Bengal", "Telangana"
+];
 
 export function Eligibility({ go, profile, setProfile }) {
   const { schemes: SCHEMES, states: refStates, facets } = useCatalogue();
-  const STATES = refStates.length ? refStates : facets.states.map(s => s.value);
+  const catalogueStates = refStates.length ? refStates : facets.states.map(s => s.value);
+  // Merge catalogue states with official states/UTs
+  const ALL_STATES = useMemo(() => {
+    const set = new Set([...ALL_INDIAN_STATES, ...catalogueStates]);
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [catalogueStates]);
+
   const [step, setStep] = useState(profile ? 99 : 0);
   const [p, setP] = useState(profile || { state: "", district: "", applicant: "", sector: "", income: "", invest: null, stage: "", loan: null });
+
+  const currentDistricts = useMemo(() => {
+    return p.state ? getDistrictsForState(p.state) : [];
+  }, [p.state]);
+
+  const allIndiaDistricts = useMemo(() => {
+    return getAllDistrictsFlattened().map(d => ({
+      label: d.district,
+      value: d.district,
+      sub: d.state,
+    }));
+  }, []);
+
   const steps = [
-    { key: "state", q: "Which state are you in?", render: () => (
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-        {STATES.map(s => <button key={s} className={`chip ${p.state === s ? "on" : ""}`} onClick={() => setP({ ...p, state: s })}>{s}</button>)}
-      </div>) },
-    { key: "district", q: "Which district? (optional)", render: () => (
-      <input className="txt" style={{ maxWidth: 340 }} placeholder="e.g. Kheda" value={p.district} onChange={e => setP({ ...p, district: e.target.value })} />), optional: true },
+    {
+      key: "state",
+      q: "Which state or union territory are you in?",
+      render: () => (
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <SearchableDropdown
+            value={p.state}
+            options={ALL_STATES}
+            placeholder="Select or search state / UT..."
+            searchPlaceholder="Type state name (e.g. Gujarat, Maharashtra, Delhi)..."
+            badgeText={p.state ? `Selected: ${p.state}` : `${ALL_STATES.length} States & UTs`}
+            onChange={(selectedState) => {
+              const districtsForNewState = getDistrictsForState(selectedState);
+              const districtValid = districtsForNewState.includes(p.district);
+              setP(prev => ({
+                ...prev,
+                state: selectedState,
+                district: districtValid ? prev.district : "",
+              }));
+            }}
+          />
+          <div>
+            <div className="tt" style={{ marginBottom: 8 }}>Quick select popular states:</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {POPULAR_STATES.map(s => (
+                <button
+                  key={s}
+                  type="button"
+                  className={`chip ${p.state === s ? "on" : ""}`}
+                  onClick={() => {
+                    const districtsForNewState = getDistrictsForState(s);
+                    const districtValid = districtsForNewState.includes(p.district);
+                    setP(prev => ({
+                      ...prev,
+                      state: s,
+                      district: districtValid ? prev.district : "",
+                    }));
+                  }}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: "district",
+      q: p.state ? `Which district in ${p.state}? (optional)` : "Which district? (optional)",
+      render: () => (
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          {p.state && currentDistricts.length > 0 ? (
+            <>
+              <SearchableDropdown
+                value={p.district}
+                options={currentDistricts}
+                placeholder={`Select or search district in ${p.state}...`}
+                searchPlaceholder={`Type district name in ${p.state} (e.g. ${currentDistricts[0] || "District"})...`}
+                badgeText={p.district ? `Selected: ${p.district} (${p.state})` : `${currentDistricts.length} Districts in ${p.state}`}
+                onChange={(selectedDistrict) => {
+                  setP(prev => ({ ...prev, district: selectedDistrict }));
+                }}
+              />
+              {currentDistricts.length > 0 && (
+                <div>
+                  <div className="tt" style={{ marginBottom: 8 }}>Sample districts in {p.state}:</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8, maxHeight: 110, overflowY: "auto" }}>
+                    {currentDistricts.slice(0, 12).map(d => (
+                      <button
+                        key={d}
+                        type="button"
+                        className={`chip ${p.district === d ? "on" : ""}`}
+                        onClick={() => setP(prev => ({ ...prev, district: d }))}
+                      >
+                        {d}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              <div style={{ fontSize: 13, color: "var(--muted)", marginBottom: 4 }}>
+                {p.state ? `No preloaded district list for ${p.state}, type custom district below:` : "No state selected yet. Search all Indian districts below or choose a state first:"}
+              </div>
+              <SearchableDropdown
+                value={p.district}
+                options={allIndiaDistricts}
+                placeholder="Search across all Indian districts..."
+                searchPlaceholder="Type district name (e.g. Kheda, Pune, Jaipur, Patna)..."
+                badgeText="All India Search"
+                onChange={(selectedDistrict, opt) => {
+                  setP(prev => ({
+                    ...prev,
+                    district: selectedDistrict,
+                    state: opt?.sub || prev.state,
+                  }));
+                }}
+              />
+            </>
+          )}
+        </div>
+      ),
+      optional: true,
+    },
     { key: "applicant", q: "What describes you best?", render: () => (
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
         {APPLICANTS.map(a => <button key={a.id} className={`chip ${p.applicant === a.id ? "on" : ""}`} onClick={() => setP({ ...p, applicant: a.id })}>{a.label}</button>)}
@@ -72,7 +199,13 @@ export function Eligibility({ go, profile, setProfile }) {
               <div style={{ flex: 1, minWidth: 220 }}>
                 <div className="tt" style={{ marginBottom: 4 }}>Top-ranked scheme for your profile</div>
                 <div style={{ fontFamily: "var(--serif)", fontWeight: 700, fontSize: 20, color: "var(--paper)" }}>{top.s.short}</div>
-                <div style={{ fontSize: 12.5, color: "var(--muted)", margin: "3px 0 12px" }}>{top.s.name}</div>
+                <div style={{ fontSize: 12.5, color: "var(--muted)", margin: "3px 0 8px" }}>{top.s.name}</div>
+                {(p.state || p.district) && (
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+                    {p.state && <span className="badge b-official">📍 {p.state}</span>}
+                    {p.district && <span className="badge b-verified">{p.district}</span>}
+                  </div>
+                )}
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                   <button className="btn pri" onClick={() => go("intel", top.s.id)}>Open scheme intelligence →</button>
                   <button className="btn sec" onClick={() => { setStep(0); setP({ state: "", district: "", applicant: "", sector: "", income: "", invest: null, stage: "", loan: null }); setProfile(null); }}>Redo profile</button>
