@@ -32,35 +32,6 @@
   --mono:'IBM Plex Mono',ui-monospace,monospace;
 }
 
-[data-theme="dark"]{
-  /* DEEP OLIVE, SAGE GREEN, SOFT WHITE - Dark Palette */
-  --bg:#15271F;
-  --bg2:#1B3227;
-  --panel:#1F3B2E; /* User's exact #1F3B2E Deep Olive */
-  --panel2:#284838;
-  --line:#2D5240;
-  --line2:#3E6E56;
-  --paper:#F6F3EC;
-  --paper2:#E8DCC6; /* User's exact #E8DCC6 Soft White */
-  --ink:#15271F;
-  --ink2:#2B4A39;
-  --txt:#EDE9E0;
-  --muted:#9CB89E; /* Sage Green */
-  --muted2:#739476;
-  --em:#88BA85; /* Vibrant Sage Green Primary */
-  --em-txt:#15271F;
-  --emD:#315843;
-  --cy:#A2C99F; /* Light Sage Green Accent */
-  --gold:#E8DCC6;
-  --red:#E27B75;
-  --amber:#E5B46D;
-  --sage:#88BA85;
-  --olive:#1F3B2E;
-  --softwhite:#E8DCC6;
-  --strip-bg:rgba(21,39,31,0.95);
-  --card-shadow:0 4px 20px rgba(0,0,0,0.25);
-}
-
 *{box-sizing:border-box;margin:0;padding:0}
 html{
   -webkit-text-size-adjust:100%;

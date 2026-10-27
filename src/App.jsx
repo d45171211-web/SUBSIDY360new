@@ -27,20 +27,12 @@ function Shell() {
   const [query, setQuery] = useState("");
   const [menu, setMenu] = useState(false);
   const [method, setMethod] = useState(false);
-  const [theme, setTheme] = useState(() => {
-    try {
-      return localStorage.getItem("s360_theme") || "light";
-    } catch {
-      return "light";
-    }
-  });
-
   useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.removeAttribute("data-theme");
     try {
-      localStorage.setItem("s360_theme", theme);
+      localStorage.removeItem("s360_theme");
     } catch {}
-  }, [theme]);
+  }, []);
 
   const go = (t, id) => { if (id) setSchemeId(id); setTab(t); setMenu(false); window.scrollTo({ top: 0 }); };
   const toggleCompare = (id) => setCompare(c => c.includes(id) ? c.filter(x => x !== id) : [...c, id]);
@@ -72,43 +64,12 @@ function Shell() {
           <nav className="nav-d" aria-label="Primary">
             {NAV.map(([k, l]) => <button key={k} className={tab === k ? "on" : ""} onClick={() => go(k)}>{l}</button>)}
           </nav>
-          <button
-            className="chip"
-            style={{
-              padding: "5px 11px",
-              fontSize: 11.5,
-              fontFamily: "var(--mono)",
-              border: "1px solid var(--line2)",
-              background: "var(--panel2)",
-              color: "var(--paper)",
-              cursor: "pointer",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 5,
-              fontWeight: 600,
-              flexShrink: 0,
-            }}
-            onClick={() => setTheme(t => t === "light" ? "dark" : "light")}
-            title="Toggle Soft White / Deep Olive theme"
-            aria-label="Toggle theme"
-          >
-            {theme === "light" ? "☾ Deep Olive" : "☼ Soft White"}
-          </button>
           <button className="burger" onClick={() => setMenu(m => !m)} aria-label="Toggle menu" aria-expanded={menu}>{menu ? "✕" : "☰"}</button>
         </div>
       </header>
       {menu && (
         <nav className="nav-m" aria-label="Mobile">
           {NAV.map(([k, l]) => <button key={k} className={tab === k ? "on" : ""} onClick={() => go(k)}>{l}</button>)}
-          <div style={{ padding: "12px 22px", borderTop: "1px solid var(--line)" }}>
-            <button
-              className="btn sec"
-              style={{ width: "100%", justifyContent: "center", fontSize: 13 }}
-              onClick={() => setTheme(t => t === "light" ? "dark" : "light")}
-            >
-              {theme === "light" ? "Switch to ☾ Deep Olive" : "Switch to ☼ Soft White"}
-            </button>
-          </div>
         </nav>
       )}
       <div className="ticker" aria-hidden="true">
