@@ -78,17 +78,17 @@ export function Overview({ go, setQuery }) {
             </div>
           </div>
           <div className="panel lt" style={{ padding: 22, display: "flex", flexDirection: "column", gap: 12 }}>
-            <span className="eyebrow" style={{ color: "var(--emD)" }}>Guided path</span>
-            <h2 className="sec" style={{ color: "var(--ink)" }}>Not sure where to start?</h2>
-            <p style={{ color: "var(--ink2)", fontSize: 13.5 }}>
+            <span className="eyebrow" style={{ color: "var(--lilac-soft)" }}>Guided path</span>
+            <h2 className="sec" style={{ color: "var(--lilac-soft)" }}>Not sure where to start?</h2>
+            <p style={{ color: "rgba(200, 182, 226, 0.88)", fontSize: 13.5 }}>
               Answer a short profile — state, applicant type, sector, income band and project size — and Subsidy360 ranks every indexed scheme against your answers with a transparent breakdown.
             </p>
             {["Location & applicant screening", "Investment-range fit", "Loan requirement check", "Reason-coded match analysis"].map((x, i) => (
-              <div key={x} style={{ display: "flex", gap: 10, fontSize: 13.5, color: "var(--ink)" }}>
-                <span className="mono" style={{ color: "var(--emD)", fontWeight: 600 }}>{String(i + 1).padStart(2, "0")}</span>{x}
+              <div key={x} style={{ display: "flex", gap: 10, fontSize: 13.5, color: "var(--lilac-soft)" }}>
+                <span className="mono" style={{ color: "var(--lilac-soft)", fontWeight: 600 }}>{String(i + 1).padStart(2, "0")}</span>{x}
               </div>
             ))}
-            <button className="btn pri" style={{ marginTop: "auto", alignSelf: "flex-start" }} onClick={() => go("eligibility")}>Start eligibility check →</button>
+            <button className="btn pri" style={{ marginTop: "auto", alignSelf: "flex-start", borderColor: "rgba(200, 182, 226, 0.35)" }} onClick={() => go("eligibility")}>Start eligibility check →</button>
           </div>
         </div>
       </section>
