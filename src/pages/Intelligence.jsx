@@ -138,9 +138,9 @@ export function Intelligence({ schemeId, go, profile, setSchemeId }) {
             </div>
           </div>
           <div className="panel lt" style={{ padding: 20 }}>
-            <div className="eyebrow" style={{ color: "var(--lilac-soft)", marginBottom: 8 }}>Official source</div>
-            <div className="mono" style={{ fontSize: 14, color: "var(--lilac-soft)", fontWeight: 600, wordBreak: "break-all" }}>{s.source || "Not reported"}</div>
-            <p style={{ fontSize: 12.5, color: "rgba(200, 182, 226, 0.88)", marginTop: 8 }}>
+            <div className="eyebrow" style={{ color: "rgba(255, 255, 255, 0.9)", marginBottom: 8 }}>Official source</div>
+            <div className="mono" style={{ fontSize: 14, color: "#FFFFFF", fontWeight: 600, wordBreak: "break-all" }}>{s.source || "Not reported"}</div>
+            <p style={{ fontSize: 12.5, color: "rgba(255, 255, 255, 0.88)", marginTop: 8 }}>
               Always confirm current guidelines, rates and cut-offs on the official portal before applying. Record last verified {s.verified || "Not reported"} · source: {s.provenance?.connector || "bundled-seed"}.
             </p>
           </div>

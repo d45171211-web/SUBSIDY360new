@@ -111,11 +111,11 @@ h1.hero{font:700 clamp(38px,6vw,64px) var(--serif);letter-spacing:.01em;color:va
 h2.sec{font:700 clamp(21px,3vw,28px) var(--serif);color:var(--paper);line-height:1.2}
 .sub{color:var(--muted);max-width:640px}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;min-width:0;box-shadow:var(--card-shadow);transition:border-color .2s ease, box-shadow .2s ease, background-color .25s ease}
-.panel.lt{background:var(--paper2);color:var(--lilac-soft);border-color:rgba(200,182,226,.28)}
-.panel.lt .sec,.panel.lt h2{color:var(--lilac-soft) !important}
-.panel.lt .eyebrow{color:var(--lilac-soft) !important;opacity:.95}
-.panel.lt p{color:rgba(200,182,226,.88) !important}
-.panel.lt .mono{color:var(--lilac-soft) !important}
+.panel.lt{background:var(--paper2);color:#FFFFFF;border-color:rgba(255,255,255,.18)}
+.panel.lt .sec,.panel.lt h2{color:#FFFFFF !important}
+.panel.lt .eyebrow{color:rgba(255,255,255,.9) !important;opacity:.95}
+.panel.lt p{color:rgba(255,255,255,.88) !important}
+.panel.lt .mono{color:#FFFFFF !important}
 .btn{display:inline-flex;align-items:center;gap:8px;border-radius:4px;font:600 13px var(--sans);letter-spacing:.03em;padding:11px 18px;cursor:pointer;border:1px solid transparent;transition:filter .15s, border-color .15s, background-color .15s;flex-shrink:0}
 .btn.pri{background:var(--em);color:var(--em-txt, #FAF9F5)}.btn.pri:hover{filter:brightness(1.12)}
 .btn.sec{background:transparent;border-color:var(--line2);color:var(--txt)}.btn.sec:hover{border-color:var(--em);color:var(--em)}
