@@ -7,64 +7,95 @@ import { SearchableDropdown } from "../components/SearchableDropdown.jsx";
 import { SECTORS } from "../data/constants.js";
 
 /**
- * Curated Benchmark Presets for 1-click comparison of major Central/State policies
+ * Curated Benchmark Presets for 1-Click Comparison
  */
 const PRESET_COMPARISONS = [
   {
     id: "solar",
-    title: "Solar Energy: PM Surya Ghar vs PM-KUSUM",
-    category: "solar-renewable-energy",
+    icon: "☀️",
+    badge: "Solar & Clean Energy",
+    title: "PM Surya Ghar vs PM-KUSUM",
     schemeIds: ["pmsgmb", "pm-kusum"],
-    badge: "Solar",
-    desc: "Household rooftop solar (up to ₹78,000) vs agricultural solar pumps & grid plants for farmers",
+    desc: "Household rooftop solar (up to ₹78,000 subsidy) vs farmer agricultural solar pumps & feeder solarisation",
+    highlights: ["Rooftop vs Agricultural", "Direct DBT vs Component Subsidy", "No loan needed vs Bank-linked"],
   },
   {
     id: "msme",
-    title: "MSME & Business: PMEGP vs Mudra vs PM Vishwakarma",
-    category: "msme-business",
+    icon: "💼",
+    badge: "MSME & Business",
+    title: "PMEGP vs Mudra vs PM Vishwakarma",
     schemeIds: ["pmegp", "pmmy", "pmv"],
-    badge: "MSME",
-    desc: "Credit-linked subsidy (up to ₹50L) vs micro-enterprise credit vs artisan toolkit loan & grant",
+    desc: "Capital subsidy (up to ₹50L project) vs collateral-free micro-credit (up to ₹10L) vs artisan toolkit & skill grant",
+    highlights: ["15–35% Margin Money", "Collateral-free debt", "18 Traditional Trades"],
   },
   {
     id: "agri",
-    title: "Agriculture: PM-KISAN vs PMFBY vs Paramparagat Krishi",
-    category: "agriculture-farmers",
+    icon: "🌾",
+    badge: "Agriculture & Farmers",
+    title: "PM-KISAN vs PMFBY vs Paramparagat Krishi",
     schemeIds: ["pm-kisan", "pmfby", "pkvy"],
-    badge: "Farming",
-    desc: "Direct ₹6,000/yr DBT income vs comprehensive crop loss insurance vs organic cluster subsidy",
+    desc: "Direct ₹6,000/yr DBT income support vs crop loss insurance coverage vs organic farming cluster assistance",
+    highlights: ["Universal farmer DBT", "1.5–5% premium cap", "₹50,000/ha organic grant"],
   },
   {
     id: "housing",
-    title: "Affordable Housing: PMAY (Urban) vs PMAY (Gramin)",
-    category: "housing",
+    icon: "🏠",
+    badge: "Affordable Housing",
+    title: "PMAY (Urban) vs PMAY (Gramin)",
     schemeIds: ["pmay-u", "pmay-g"],
-    badge: "Housing",
-    desc: "Urban credit-linked interest subsidy & pucca house vs rural direct grant assistance",
+    desc: "Urban interest subsidy & dwelling units vs rural direct grant assistance (up to ₹1.3 lakh) for pucca houses",
+    highlights: ["Urban Credit-Linked", "Direct rural grant", "Aadhaar Geo-tagged"],
   },
   {
     id: "startups",
-    title: "Startups: Credit Guarantee vs Fund of Funds",
-    category: "startup-entrepreneurship",
+    icon: "🚀",
+    badge: "Startups & Innovation",
+    title: "Credit Guarantee vs Fund of Funds",
     schemeIds: ["cgss", "ffs"],
-    badge: "Startups",
-    desc: "Collateral-free debt guarantees for DPIIT startups vs catalytic equity venture capital",
+    desc: "Collateral-free debt guarantees for DPIIT startups vs catalytic equity venture capital funding",
+    highlights: ["Debt guarantee cover", "Equity fund-of-funds", "DPIIT recognised"],
   },
   {
     id: "health",
-    title: "Healthcare: Ayushman Bharat (PM-JAY) vs AYUSH Wellness",
-    category: "health-medical",
+    icon: "🏥",
+    badge: "Healthcare & Insurance",
+    title: "Ayushman Bharat vs AYUSH Wellness",
     schemeIds: ["ab-pmjay", "ahwc"],
-    badge: "Healthcare",
-    desc: "₹5 lakh secondary & tertiary hospital cover vs primary preventive AYUSH care",
+    desc: "₹5 lakh/family secondary & tertiary hospitalisation cover vs primary preventive AYUSH health facilities",
+    highlights: ["₹5 Lakh cashless", "Secondary/Tertiary care", "AYUSH preventive health"],
   },
 ];
 
+const POPULAR_CATEGORY_SHORTCUTS = [
+  { id: "", label: "All Categories" },
+  { id: "solar-renewable-energy", label: "☀️ Solar Energy" },
+  { id: "msme-business", label: "💼 MSME & Business" },
+  { id: "agriculture-farmers", label: "🌾 Agriculture" },
+  { id: "housing", label: "🏠 Housing" },
+  { id: "health-medical", label: "🏥 Health" },
+  { id: "startup-entrepreneurship", label: "🚀 Startups" },
+  { id: "education-scholarships", label: "🎓 Education" },
+];
+
+const POPULAR_QUICK_SCHEMES_SLOT1 = [
+  { id: "pmsgmb", label: "☀️ PM Surya Ghar" },
+  { id: "pmegp", label: "💼 PMEGP" },
+  { id: "pm-kisan", label: "🌾 PM-KISAN" },
+  { id: "ab-pmjay", label: "🏥 Ayushman Bharat" },
+];
+
+const POPULAR_QUICK_SCHEMES_SLOT2 = [
+  { id: "pm-kusum", label: "☀️ PM-KUSUM" },
+  { id: "pmmy", label: "💼 PM Mudra" },
+  { id: "pmfby", label: "🌾 PM Fasal Bima" },
+  { id: "pmay-u", label: "🏠 PMAY (Urban)" },
+];
+
 const ATTRIBUTE_GROUPS = [
-  { id: "all", label: "All Attributes (12)" },
-  { id: "financial", label: "Financial & Benefits (4)" },
-  { id: "eligibility", label: "Eligibility & Scope (3)" },
-  { id: "process", label: "Process & Compliance (5)" },
+  { id: "all", label: "All Attributes", count: 12, icon: "📋" },
+  { id: "financial", label: "Financial & Benefits", count: 4, icon: "💰" },
+  { id: "eligibility", label: "Eligibility & Scope", count: 3, icon: "👥" },
+  { id: "process", label: "Process & Documents", count: 5, icon: "📑" },
 ];
 
 export function Compare({ compare = [], toggleCompare, setCompare, go }) {
@@ -73,11 +104,11 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
   // Active filters and settings
   const [categoryFilter, setCategoryFilter] = useState("");
   const [levelFilter, setLevelFilter] = useState("");
-  const [selectedPresetId, setSelectedPresetId] = useState("");
   const [activeGroup, setActiveGroup] = useState("all");
   const [highlightDiff, setHighlightDiff] = useState(true);
-  const [activeHeaderMenu, setActiveHeaderMenu] = useState(null); // scheme id for open menu
-  const [swappingColIndex, setSwappingColIndex] = useState(null); // column index currently picking new scheme
+  const [activeHeaderMenu, setActiveHeaderMenu] = useState(null); // scheme id for open column menu
+  const [activeSlotMenu, setActiveSlotMenu] = useState(null); // slot index for replacing
+  const [presetNotification, setPresetNotification] = useState("");
 
   const headerMenuRef = useRef(null);
 
@@ -98,6 +129,17 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
       .map(id => SCHEMES.find(s => s.id === id))
       .filter(Boolean);
   }, [compare, SCHEMES]);
+
+  // Check if a preset is currently active
+  const activePresetId = useMemo(() => {
+    if (picked.length === 0) return "";
+    for (const p of PRESET_COMPARISONS) {
+      if (p.schemeIds.length === picked.length && p.schemeIds.every(id => compare.includes(id))) {
+        return p.id;
+      }
+    }
+    return "";
+  }, [picked, compare]);
 
   // Options for scheme selectors filtered by category / level
   const schemeOptions = useMemo(() => {
@@ -124,20 +166,17 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
     if (!newId) return;
     const current = [...(compare || [])];
     if (index < current.length) {
-      // Replace existing slot
       current[index] = newId;
     } else {
-      // Append new slot
       current.push(newId);
     }
-    // Deduplicate while preserving slot
     const deduped = Array.from(new Set(current));
     if (setCompare) {
       setCompare(deduped);
     } else if (toggleCompare) {
       toggleCompare(newId);
     }
-    setSwappingColIndex(null);
+    setActiveSlotMenu(null);
     setActiveHeaderMenu(null);
   };
 
@@ -165,18 +204,15 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
     } else if (toggleCompare) {
       compare.forEach(id => toggleCompare(id));
     }
-    setSelectedPresetId("");
   };
 
-  const handleApplyPreset = (presetId) => {
-    setSelectedPresetId(presetId);
-    const p = PRESET_COMPARISONS.find(x => x.id === presetId);
-    if (p) {
-      // Filter existing valid IDs in this catalogue
-      const validIds = p.schemeIds.filter(id => SCHEMES.some(s => s.id === id));
-      if (validIds.length && setCompare) {
-        setCompare(validIds);
-      }
+  const applyPreset = (preset) => {
+    const validIds = preset.schemeIds.filter(id => SCHEMES.some(s => s.id === id));
+    if (validIds.length && setCompare) {
+      setCompare(validIds);
+      setPresetNotification(`Applied: ${preset.title}`);
+      setTimeout(() => setPresetNotification(""), 3500);
+      window.scrollTo({ top: 320, behavior: "smooth" });
     }
   };
 
@@ -281,302 +317,637 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
     return picked.some(s => row.getRaw(s) !== firstVal);
   };
 
+  const diffCount = useMemo(() => {
+    if (picked.length < 2) return 0;
+    return visibleRows.filter(r => checkRowDiff(r)).length;
+  }, [picked, visibleRows]);
+
   return (
-    <div className="fadein" style={{ padding: "34px 0" }}>
-      {/* Top Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12, marginBottom: 12 }}>
+    <div className="fadein" style={{ padding: "28px 0 40px" }}>
+      {/* Toast Notification when applying preset */}
+      {presetNotification && (
+        <div
+          className="fadein"
+          style={{
+            position: "fixed",
+            top: 72,
+            right: 24,
+            zIndex: 999,
+            background: "var(--em)",
+            color: "#FAF9F5",
+            padding: "10px 18px",
+            borderRadius: 6,
+            fontSize: 13,
+            fontWeight: 600,
+            boxShadow: "0 8px 24px rgba(31, 59, 46, 0.25)",
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+          }}
+        >
+          <span>✓</span>
+          <span>{presetNotification}</span>
+        </div>
+      )}
+
+      {/* Main Page Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 14, marginBottom: 18 }}>
         <div>
-          <div className="eyebrow" style={{ marginBottom: 6 }}>Compare • Menu-Driven</div>
-          <h2 className="sec" style={{ marginBottom: 4 }}>Side-by-side comparison</h2>
-          <p className="sub" style={{ fontSize: 13.5 }}>
-            Compare government schemes side-by-side across benefits, caps, eligibility, and process rules. Select schemes via dropdown menus, load policy presets, or filter across all 34 support categories.
+          <div className="eyebrow" style={{ marginBottom: 6 }}>
+            Side-by-side comparison • Menu driven
+          </div>
+          <h2 className="sec" style={{ fontSize: "clamp(22px, 3.2vw, 30px)", marginBottom: 4 }}>
+            Compare Schemes
+          </h2>
+          <p className="sub" style={{ fontSize: 13.5, maxWidth: 660 }}>
+            Compare Central and State government schemes side-by-side. Pick schemes using intuitive dropdown menus, apply 1-click policy benchmark presets, or filter across all 34 support categories.
           </p>
         </div>
 
-        {picked.length > 0 && (
-          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <span className="badge b-official" style={{ fontSize: 11 }}>
-              {picked.length} {picked.length === 1 ? "Scheme selected" : "Schemes in comparison"}
-            </span>
-            <button
-              type="button"
-              className="btn sec"
-              style={{ fontSize: 12, padding: "6px 12px" }}
-              onClick={clearAll}
-              title="Reset comparison"
-            >
-              ✕ Clear all
-            </button>
-          </div>
-        )}
+        {/* Global Quick Action Pills */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          {picked.length > 0 && (
+            <>
+              <span className="badge b-official" style={{ fontSize: 11, padding: "5px 10px" }}>
+                {picked.length} {picked.length === 1 ? "Scheme Selected" : "Schemes Compared"}
+              </span>
+              {picked.length >= 2 && (
+                <button
+                  type="button"
+                  className="btn sec"
+                  onClick={() => swapSlots(0, 1)}
+                  style={{ fontSize: 12, padding: "6px 12px" }}
+                  title="Swap Scheme 1 and Scheme 2"
+                >
+                  ⇄ Swap 1 & 2
+                </button>
+              )}
+              <button
+                type="button"
+                className="btn sec"
+                onClick={clearAll}
+                style={{ fontSize: 12, padding: "6px 12px", color: "var(--red)" }}
+                title="Clear all selected schemes"
+              >
+                ✕ Reset
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
-      {/* Main Menu Controls Toolbar */}
+      {/* SECTION 1: 1-Click Apply Benchmark Presets Menu Strip */}
       <div
         className="panel"
         style={{
-          padding: "16px 18px",
+          padding: "18px 20px",
           marginBottom: 20,
           background: "var(--panel)",
-          border: "1px solid var(--line2)",
-          display: "flex",
-          flexDirection: "column",
-          gap: 14,
+          border: "1.5px solid var(--line2)",
+          borderRadius: 8,
         }}
       >
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 220px), 1fr))", gap: 14 }}>
-          {/* Menu 1: Curated Presets Menu */}
-          <div>
-            <label className="tt" style={{ display: "block", marginBottom: 5 }}>
-              ⚡ Quick Comparison Presets
-            </label>
-            <select
-              className="sel"
-              value={selectedPresetId}
-              onChange={(e) => handleApplyPreset(e.target.value)}
-              style={{ fontSize: 13, padding: "9px 12px" }}
-            >
-              <option value="">Choose a benchmark preset…</option>
-              {PRESET_COMPARISONS.map(p => (
-                <option key={p.id} value={p.id}>
-                  {p.title}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Menu 2: Support Category Filter Menu */}
-          <div>
-            <label className="tt" style={{ display: "block", marginBottom: 5 }}>
-              Filter Menu by Category ({SECTORS.length} Categories)
-            </label>
-            <select
-              className="sel"
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              style={{ fontSize: 13, padding: "9px 12px" }}
-            >
-              <option value="">All Support Categories (4,670+ schemes)</option>
-              {SECTORS.map(s => (
-                <option key={s.id} value={s.id}>
-                  {s.num}. {s.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Menu 3: Central / State Scope Menu */}
-          <div>
-            <label className="tt" style={{ display: "block", marginBottom: 5 }}>
-              Filter Menu by Level
-            </label>
-            <select
-              className="sel"
-              value={levelFilter}
-              onChange={(e) => setLevelFilter(e.target.value)}
-              style={{ fontSize: 13, padding: "9px 12px" }}
-            >
-              <option value="">All Levels (Central & State)</option>
-              <option value="Central">Central Schemes Only</option>
-              <option value="State">State Schemes Only</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Selected Category / Level Indicator */}
-        {(categoryFilter || levelFilter) && (
-          <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 12.5, color: "var(--muted)", flexWrap: "wrap", paddingTop: 4, borderTop: "1px dashed var(--line)" }}>
-            <span>
-              Dropdown menus filtered to: <b>{categoryFilter ? (SECTORS.find(s => s.id === categoryFilter)?.label || categoryFilter) : "All categories"}</b> · <b>{levelFilter ? `${levelFilter} schemes` : "Central & State"}</b> ({schemeOptions.length} matching options)
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12, flexWrap: "wrap", gap: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 16 }}>⚡</span>
+            <span style={{ font: "700 13px var(--mono)", color: "var(--paper)", letterSpacing: ".06em", textTransform: "uppercase" }}>
+              1-Click Benchmark Comparisons
             </span>
-            <button
-              type="button"
-              className="btn ghost"
-              style={{ fontSize: 11, padding: "2px 6px" }}
-              onClick={() => { setCategoryFilter(""); setLevelFilter(""); }}
-            >
-              Reset filters
-            </button>
+            <span style={{ fontSize: 11.5, color: "var(--muted)", fontWeight: 500 }}>
+              — Tap any preset to instantly load and compare:
+            </span>
           </div>
-        )}
-      </div>
 
-      {/* Menu-Driven Scheme Selector Slots */}
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 8 }}>
-          <div className="tt" style={{ textTransform: "uppercase" }}>
-            Scheme Comparison Slots ({picked.length} active)
-          </div>
-          {picked.length >= 2 && (
-            <button
-              type="button"
-              className="btn ghost"
-              style={{ fontSize: 12, padding: "3px 8px" }}
-              onClick={() => swapSlots(0, 1)}
-              title="Swap Column 1 and Column 2"
-            >
-              ⇄ Swap Scheme 1 & 2
-            </button>
+          {activePresetId && (
+            <span className="badge b-official" style={{ fontSize: 10.5 }}>
+              Active Preset: {PRESET_COMPARISONS.find(p => p.id === activePresetId)?.badge}
+            </span>
           )}
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: 14 }}>
-          {/* Slot 1: Scheme A */}
-          <div className="panel" style={{ padding: "14px 16px", background: "var(--panel2)", border: "1.5px solid var(--line2)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-              <span className="mono" style={{ fontSize: 11, fontWeight: 700, color: "var(--cy)", letterSpacing: ".08em" }}>
-                SLOT 1 (SCHEME A)
-              </span>
-              {picked[0] && (
-                <button
-                  type="button"
-                  onClick={() => removeSlot(picked[0].id)}
-                  style={{ background: "transparent", border: "none", color: "var(--muted)", cursor: "pointer", fontSize: 12 }}
-                  title="Remove scheme from Slot 1"
-                >
-                  ✕ Remove
-                </button>
-              )}
-            </div>
-
-            <SearchableDropdown
-              value={picked[0] ? picked[0].id : ""}
-              options={schemeOptions}
-              placeholder="Select Scheme 1 from menu..."
-              searchPlaceholder="Type scheme name (e.g. PMEGP, Solar, PM-KISAN)..."
-              badgeText={picked[0] ? `${picked[0].level} · ${picked[0].maxBenefitL != null ? `Max ${fmtL(picked[0].maxBenefitL)}` : "Scale-based"}` : undefined}
-              onChange={(selectedVal) => updateSlot(0, selectedVal)}
-              style={{ maxWidth: "100%" }}
-            />
-
-            {picked[0] && (
-              <div style={{ marginTop: 8, fontSize: 11.5, color: "var(--muted)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "80%" }}>
-                  {picked[0].dept?.split("·")[0].trim() || "National Programme"}
-                </span>
-                <button
-                  type="button"
-                  className="btn ghost"
-                  style={{ fontSize: 11, padding: "1px 4px" }}
-                  onClick={() => go("intel", picked[0].id)}
-                >
-                  Intel →
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Slot 2: Scheme B */}
-          <div className="panel" style={{ padding: "14px 16px", background: "var(--panel2)", border: "1.5px solid var(--line2)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-              <span className="mono" style={{ fontSize: 11, fontWeight: 700, color: "var(--cy)", letterSpacing: ".08em" }}>
-                SLOT 2 (SCHEME B)
-              </span>
-              {picked[1] && (
-                <button
-                  type="button"
-                  onClick={() => removeSlot(picked[1].id)}
-                  style={{ background: "transparent", border: "none", color: "var(--muted)", cursor: "pointer", fontSize: 12 }}
-                  title="Remove scheme from Slot 2"
-                >
-                  ✕ Remove
-                </button>
-              )}
-            </div>
-
-            <SearchableDropdown
-              value={picked[1] ? picked[1].id : ""}
-              options={schemeOptions}
-              placeholder="Select Scheme 2 from menu..."
-              searchPlaceholder="Type scheme name (e.g. Mudra, KUSUM, PMFBY)..."
-              badgeText={picked[1] ? `${picked[1].level} · ${picked[1].maxBenefitL != null ? `Max ${fmtL(picked[1].maxBenefitL)}` : "Scale-based"}` : undefined}
-              onChange={(selectedVal) => updateSlot(1, selectedVal)}
-              style={{ maxWidth: "100%" }}
-            />
-
-            {picked[1] && (
-              <div style={{ marginTop: 8, fontSize: 11.5, color: "var(--muted)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "80%" }}>
-                  {picked[1].dept?.split("·")[0].trim() || "National Programme"}
-                </span>
-                <button
-                  type="button"
-                  className="btn ghost"
-                  style={{ fontSize: 11, padding: "1px 4px" }}
-                  onClick={() => go("intel", picked[1].id)}
-                >
-                  Intel →
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Additional Slots (Slot 3+) if compared */}
-          {picked.slice(2).map((s, extraIdx) => {
-            const slotIndex = 2 + extraIdx;
+        {/* Preset Cards Grid (Easy 1-Click Application) */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 250px), 1fr))",
+            gap: 10,
+          }}
+        >
+          {PRESET_COMPARISONS.map(preset => {
+            const isActive = activePresetId === preset.id;
             return (
-              <div key={s.id} className="panel" style={{ padding: "14px 16px", background: "var(--panel2)", border: "1.5px solid var(--line2)" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                  <span className="mono" style={{ fontSize: 11, fontWeight: 700, color: "var(--cy)", letterSpacing: ".08em" }}>
-                    SLOT {slotIndex + 1}
-                  </span>
+              <div
+                key={preset.id}
+                onClick={() => applyPreset(preset)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") applyPreset(preset); }}
+                style={{
+                  padding: "12px 14px",
+                  borderRadius: 6,
+                  border: isActive ? "2px solid var(--em)" : "1px solid var(--line2)",
+                  background: isActive ? "var(--panel2)" : "var(--bg2)",
+                  cursor: "pointer",
+                  transition: "all .18s ease",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  boxShadow: isActive ? "0 4px 14px rgba(31, 59, 46, 0.12)" : "none",
+                  outline: "none",
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.borderColor = "var(--em)";
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.borderColor = "var(--line2)";
+                    e.currentTarget.style.transform = "none";
+                  }
+                }}
+              >
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "var(--cy)", fontFamily: "var(--mono)" }}>
+                      {preset.icon} {preset.badge}
+                    </span>
+                    {isActive ? (
+                      <span className="badge b-official" style={{ fontSize: 9.5, padding: "1px 6px" }}>
+                        ✓ ACTIVE
+                      </span>
+                    ) : (
+                      <span style={{ fontSize: 10.5, color: "var(--muted)", fontFamily: "var(--mono)" }}>
+                        APPLY ↵
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ fontWeight: 700, fontSize: 13.5, color: "var(--paper)", lineHeight: 1.3, marginBottom: 4 }}>
+                    {preset.title}
+                  </div>
+                  <div style={{ fontSize: 11.5, color: "var(--muted)", lineHeight: 1.4 }}>
+                    {preset.desc}
+                  </div>
+                </div>
+
+                <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px dashed var(--line)", display: "flex", gap: 5, flexWrap: "wrap" }}>
+                  {preset.highlights.map(h => (
+                    <span key={h} style={{ fontSize: 10, color: "var(--muted2)", background: "rgba(123, 155, 125, 0.12)", padding: "1px 5px", borderRadius: 3 }}>
+                      {h}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* SECTION 2: Search & Filter Menu Toolbar */}
+      <div
+        className="panel"
+        style={{
+          padding: "14px 18px",
+          marginBottom: 20,
+          background: "var(--bg2)",
+          border: "1px solid var(--line)",
+          borderRadius: 8,
+          display: "flex",
+          flexDirection: "column",
+          gap: 12,
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span className="tt" style={{ textTransform: "uppercase" }}>MENU FILTERS:</span>
+            <span style={{ fontSize: 12, color: "var(--muted)" }}>
+              Filter the schemes shown in the selector dropdowns below
+            </span>
+          </div>
+
+          {/* Level Toggle Menu */}
+          <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+            <span className="tt" style={{ marginRight: 4 }}>LEVEL:</span>
+            {[
+              { id: "", label: "All Levels" },
+              { id: "Central", label: "Central" },
+              { id: "State", label: "State" },
+            ].map(lvl => (
+              <button
+                key={lvl.id}
+                type="button"
+                className={`chip ${levelFilter === lvl.id ? "on" : ""}`}
+                onClick={() => setLevelFilter(lvl.id)}
+                style={{ fontSize: 11.5, padding: "3px 9px" }}
+              >
+                {lvl.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Quick Category Chips Menu */}
+        <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+          <span className="tt" style={{ marginRight: 2 }}>QUICK CATEGORIES:</span>
+          {POPULAR_CATEGORY_SHORTCUTS.map(cat => (
+            <button
+              key={cat.id}
+              type="button"
+              className={`chip ${categoryFilter === cat.id ? "on" : ""}`}
+              onClick={() => setCategoryFilter(cat.id)}
+              style={{ fontSize: 11.5, padding: "4px 10px" }}
+            >
+              {cat.label}
+            </button>
+          ))}
+
+          {/* Complete 34 Categories Select */}
+          <select
+            className="sel"
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            style={{ width: "auto", minWidth: 170, fontSize: 11.5, padding: "4px 8px", height: 30 }}
+            aria-label="Filter by all categories"
+          >
+            <option value="">More Categories ({SECTORS.length})…</option>
+            {SECTORS.map(s => (
+              <option key={s.id} value={s.id}>
+                {s.num}. {s.label}
+              </option>
+            ))}
+          </select>
+
+          {(categoryFilter || levelFilter) && (
+            <button
+              type="button"
+              className="btn ghost"
+              onClick={() => { setCategoryFilter(""); setLevelFilter(""); }}
+              style={{ fontSize: 11, padding: "2px 6px" }}
+            >
+              ✕ Clear filters
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* SECTION 3: The Scheme Comparison Slots Dock */}
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12, flexWrap: "wrap", gap: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span className="tt" style={{ fontSize: 12, textTransform: "uppercase" }}>
+              COMPARISON SLOTS ({picked.length} ACTIVE)
+            </span>
+            <span style={{ fontSize: 12, color: "var(--muted)" }}>
+              {picked.length === 0
+                ? "Select schemes for Slot 1 and Slot 2 to compare"
+                : picked.length === 1
+                ? "Select a 2nd scheme to unlock comparison"
+                : "You can compare up to 4 schemes side-by-side"}
+            </span>
+          </div>
+        </div>
+
+        {/* Slot Cards Grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 310px), 1fr))", gap: 14 }}>
+          {/* SLOT 1 */}
+          <div
+            className="panel"
+            style={{
+              padding: "16px 18px",
+              background: picked[0] ? "var(--panel)" : "var(--panel2)",
+              border: picked[0] ? "2px solid var(--em)" : "1.5px dashed var(--line2)",
+              borderRadius: 8,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              minHeight: 180,
+            }}
+          >
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <span className="mono" style={{ fontSize: 11, fontWeight: 700, color: "var(--cy)", letterSpacing: ".08em" }}>
+                  SLOT 1 (SCHEME A)
+                </span>
+                {picked[0] && (
                   <button
                     type="button"
-                    onClick={() => removeSlot(s.id)}
+                    onClick={() => removeSlot(picked[0].id)}
                     style={{ background: "transparent", border: "none", color: "var(--muted)", cursor: "pointer", fontSize: 12 }}
-                    title={`Remove ${s.short}`}
+                    title="Remove Slot 1"
                   >
                     ✕ Remove
                   </button>
+                )}
+              </div>
+
+              {picked[0] ? (
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 16, color: "var(--paper)", marginBottom: 4, lineHeight: 1.3 }}>
+                    {picked[0].short}
+                  </div>
+                  <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 10, lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                    {picked[0].name}
+                  </div>
+
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
+                    <LevelBadge level={picked[0].level} />
+                    <span className="badge b-official" style={{ fontSize: 10 }}>
+                      {picked[0].maxBenefitL != null ? `Max ₹${picked[0].maxBenefitL}L` : "Scale-based support"}
+                    </span>
+                  </div>
+
+                  {/* Replace Scheme Dropdown toggle */}
+                  {activeSlotMenu === 0 ? (
+                    <div style={{ marginTop: 8 }}>
+                      <SearchableDropdown
+                        value={picked[0].id}
+                        options={schemeOptions}
+                        placeholder="Search replacement scheme..."
+                        searchPlaceholder="Type to switch scheme..."
+                        onChange={(selectedVal) => updateSlot(0, selectedVal)}
+                        style={{ maxWidth: "100%" }}
+                      />
+                    </div>
+                  ) : (
+                    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      <button
+                        type="button"
+                        className="btn sec"
+                        onClick={() => setActiveSlotMenu(0)}
+                        style={{ fontSize: 11.5, padding: "5px 10px" }}
+                      >
+                        🔄 Change Scheme
+                      </button>
+                      <button
+                        type="button"
+                        className="btn ghost"
+                        onClick={() => go("intel", picked[0].id)}
+                        style={{ fontSize: 11.5, padding: "5px 10px" }}
+                      >
+                        View Details →
+                      </button>
+                    </div>
+                  )}
                 </div>
+              ) : (
+                <div>
+                  <div style={{ fontSize: 13, color: "var(--muted)", marginBottom: 8 }}>
+                    Select Scheme 1 from dropdown menu:
+                  </div>
+                  <SearchableDropdown
+                    value=""
+                    options={schemeOptions}
+                    placeholder="Search & select Scheme 1..."
+                    searchPlaceholder="Type scheme name (e.g. Solar, PMEGP, KISAN)..."
+                    onChange={(selectedVal) => updateSlot(0, selectedVal)}
+                    style={{ maxWidth: "100%" }}
+                  />
 
-                <SearchableDropdown
-                  value={s.id}
-                  options={schemeOptions}
-                  placeholder={`Select Scheme ${slotIndex + 1}...`}
-                  searchPlaceholder="Type scheme name..."
-                  badgeText={`${s.level} · ${s.maxBenefitL != null ? `Max ${fmtL(s.maxBenefitL)}` : "Scale-based"}`}
-                  onChange={(selectedVal) => updateSlot(slotIndex, selectedVal)}
-                  style={{ maxWidth: "100%" }}
-                />
+                  {/* Quick Pick Suggestions */}
+                  <div style={{ marginTop: 12 }}>
+                    <div className="tt" style={{ fontSize: 10.5, marginBottom: 5 }}>OR PICK A POPULAR SCHEME:</div>
+                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                      {POPULAR_QUICK_SCHEMES_SLOT1.map(qs => (
+                        <button
+                          key={qs.id}
+                          type="button"
+                          className="chip"
+                          onClick={() => updateSlot(0, qs.id)}
+                          style={{ fontSize: 11, padding: "3px 8px" }}
+                        >
+                          {qs.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
 
-                <div style={{ marginTop: 8, fontSize: 11.5, color: "var(--muted)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "80%" }}>
-                    {s.dept?.split("·")[0].trim() || "National Programme"}
-                  </span>
+          {/* SLOT 2 */}
+          <div
+            className="panel"
+            style={{
+              padding: "16px 18px",
+              background: picked[1] ? "var(--panel)" : "var(--panel2)",
+              border: picked[1] ? "2px solid var(--em)" : "1.5px dashed var(--line2)",
+              borderRadius: 8,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              minHeight: 180,
+            }}
+          >
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                <span className="mono" style={{ fontSize: 11, fontWeight: 700, color: "var(--cy)", letterSpacing: ".08em" }}>
+                  SLOT 2 (SCHEME B)
+                </span>
+                {picked[1] && (
                   <button
                     type="button"
-                    className="btn ghost"
-                    style={{ fontSize: 11, padding: "1px 4px" }}
-                    onClick={() => go("intel", s.id)}
+                    onClick={() => removeSlot(picked[1].id)}
+                    style={{ background: "transparent", border: "none", color: "var(--muted)", cursor: "pointer", fontSize: 12 }}
+                    title="Remove Slot 2"
                   >
-                    Intel →
+                    ✕ Remove
                   </button>
+                )}
+              </div>
+
+              {picked[1] ? (
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 16, color: "var(--paper)", marginBottom: 4, lineHeight: 1.3 }}>
+                    {picked[1].short}
+                  </div>
+                  <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 10, lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                    {picked[1].name}
+                  </div>
+
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
+                    <LevelBadge level={picked[1].level} />
+                    <span className="badge b-official" style={{ fontSize: 10 }}>
+                      {picked[1].maxBenefitL != null ? `Max ₹${picked[1].maxBenefitL}L` : "Scale-based support"}
+                    </span>
+                  </div>
+
+                  {activeSlotMenu === 1 ? (
+                    <div style={{ marginTop: 8 }}>
+                      <SearchableDropdown
+                        value={picked[1].id}
+                        options={schemeOptions}
+                        placeholder="Search replacement scheme..."
+                        searchPlaceholder="Type to switch scheme..."
+                        onChange={(selectedVal) => updateSlot(1, selectedVal)}
+                        style={{ maxWidth: "100%" }}
+                      />
+                    </div>
+                  ) : (
+                    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      <button
+                        type="button"
+                        className="btn sec"
+                        onClick={() => setActiveSlotMenu(1)}
+                        style={{ fontSize: 11.5, padding: "5px 10px" }}
+                      >
+                        🔄 Change Scheme
+                      </button>
+                      <button
+                        type="button"
+                        className="btn ghost"
+                        onClick={() => go("intel", picked[1].id)}
+                        style={{ fontSize: 11.5, padding: "5px 10px" }}
+                      >
+                        View Details →
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div>
+                  <div style={{ fontSize: 13, color: "var(--muted)", marginBottom: 8 }}>
+                    Select Scheme 2 from dropdown menu:
+                  </div>
+                  <SearchableDropdown
+                    value=""
+                    options={schemeOptions}
+                    placeholder="Search & select Scheme 2..."
+                    searchPlaceholder="Type scheme name (e.g. KUSUM, Mudra, PMFBY)..."
+                    onChange={(selectedVal) => updateSlot(1, selectedVal)}
+                    style={{ maxWidth: "100%" }}
+                  />
+
+                  {/* Quick Pick Suggestions */}
+                  <div style={{ marginTop: 12 }}>
+                    <div className="tt" style={{ fontSize: 10.5, marginBottom: 5 }}>OR PICK A POPULAR SCHEME:</div>
+                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                      {POPULAR_QUICK_SCHEMES_SLOT2.map(qs => (
+                        <button
+                          key={qs.id}
+                          type="button"
+                          className="chip"
+                          onClick={() => updateSlot(1, qs.id)}
+                          style={{ fontSize: 11, padding: "3px 8px" }}
+                        >
+                          {qs.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ADDITIONAL SLOTS (3 & 4) */}
+          {picked.slice(2).map((s, extraIdx) => {
+            const slotIndex = 2 + extraIdx;
+            return (
+              <div
+                key={s.id}
+                className="panel"
+                style={{
+                  padding: "16px 18px",
+                  background: "var(--panel)",
+                  border: "2px solid var(--em)",
+                  borderRadius: 8,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  minHeight: 180,
+                }}
+              >
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                    <span className="mono" style={{ fontSize: 11, fontWeight: 700, color: "var(--cy)", letterSpacing: ".08em" }}>
+                      SLOT {slotIndex + 1}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeSlot(s.id)}
+                      style={{ background: "transparent", border: "none", color: "var(--muted)", cursor: "pointer", fontSize: 12 }}
+                      title={`Remove Slot ${slotIndex + 1}`}
+                    >
+                      ✕ Remove
+                    </button>
+                  </div>
+
+                  <div style={{ fontWeight: 700, fontSize: 16, color: "var(--paper)", marginBottom: 4, lineHeight: 1.3 }}>
+                    {s.short}
+                  </div>
+                  <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 10, lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                    {s.name}
+                  </div>
+
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center", marginBottom: 12 }}>
+                    <LevelBadge level={s.level} />
+                    <span className="badge b-official" style={{ fontSize: 10 }}>
+                      {s.maxBenefitL != null ? `Max ₹${s.maxBenefitL}L` : "Scale-based"}
+                    </span>
+                  </div>
+
+                  {activeSlotMenu === slotIndex ? (
+                    <div style={{ marginTop: 8 }}>
+                      <SearchableDropdown
+                        value={s.id}
+                        options={schemeOptions}
+                        placeholder="Search replacement..."
+                        onChange={(selectedVal) => updateSlot(slotIndex, selectedVal)}
+                        style={{ maxWidth: "100%" }}
+                      />
+                    </div>
+                  ) : (
+                    <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                      <button
+                        type="button"
+                        className="btn sec"
+                        onClick={() => setActiveSlotMenu(slotIndex)}
+                        style={{ fontSize: 11.5, padding: "5px 10px" }}
+                      >
+                        🔄 Change Scheme
+                      </button>
+                      <button
+                        type="button"
+                        className="btn ghost"
+                        onClick={() => go("intel", s.id)}
+                        style={{ fontSize: 11.5, padding: "5px 10px" }}
+                      >
+                        View Details →
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             );
           })}
 
-          {/* + Add Another Scheme Menu Slot */}
-          {picked.length >= 2 && picked.length < 5 && (
+          {/* + ADD ANOTHER SCHEME CARD */}
+          {picked.length >= 2 && picked.length < 4 && (
             <div
               className="panel"
               style={{
-                padding: "14px 16px",
-                background: "rgba(123, 155, 125, 0.08)",
-                border: "1.5px dashed var(--line2)",
+                padding: "16px 18px",
+                background: "rgba(123, 155, 125, 0.06)",
+                border: "2px dashed var(--line2)",
+                borderRadius: 8,
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
+                minHeight: 180,
               }}
             >
-              <div style={{ marginBottom: 6, fontSize: 12, fontWeight: 600, color: "var(--paper)" }}>
-                + Add Scheme to Compare (Slot {picked.length + 1})
+              <div style={{ fontWeight: 700, fontSize: 14, color: "var(--paper)", marginBottom: 4 }}>
+                + Add Scheme #{picked.length + 1}
+              </div>
+              <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 12 }}>
+                Expand your side-by-side comparison table with an additional scheme:
               </div>
               <SearchableDropdown
                 value=""
                 options={schemeOptions.filter(opt => !compare.includes(opt.value))}
-                placeholder={`+ Add scheme #${picked.length + 1} from menu...`}
+                placeholder={`Select Scheme #${picked.length + 1} from menu...`}
                 searchPlaceholder="Search & add scheme column..."
                 onChange={(selectedVal) => updateSlot(picked.length, selectedVal)}
                 style={{ maxWidth: "100%" }}
@@ -586,35 +957,29 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
         </div>
       </div>
 
-      {/* Comparison View or Zero State */}
+      {/* SECTION 4: Comparison Table or Zero State */}
       {picked.length < 2 ? (
-        <div className="panel" style={{ padding: "40px 24px", textAlign: "center", background: "var(--panel)" }}>
-          <div style={{ fontSize: 36, marginBottom: 12 }}>⚖️</div>
-          <h3 className="sec" style={{ fontSize: 19, marginBottom: 8 }}>
-            Menu-Driven Comparison Ready
+        <div
+          className="panel"
+          style={{
+            padding: "44px 24px",
+            textAlign: "center",
+            background: "var(--panel)",
+            border: "1px solid var(--line2)",
+            borderRadius: 8,
+          }}
+        >
+          <div style={{ fontSize: 40, marginBottom: 12 }}>⚖️</div>
+          <h3 className="sec" style={{ fontSize: 20, marginBottom: 8 }}>
+            Comparison Table Ready
           </h3>
-          <p style={{ color: "var(--muted)", maxWidth: 540, margin: "0 auto 20px", fontSize: 14 }}>
-            Please select at least two schemes using the dropdown menus above, or pick one of our recommended policy comparison presets below:
+          <p style={{ color: "var(--muted)", maxWidth: 520, margin: "0 auto 20px", fontSize: 14, lineHeight: 1.5 }}>
+            Pick schemes into <b>Slot 1</b> and <b>Slot 2</b> above, or click any of the <b>1-Click Benchmark Comparisons</b> at the top of the page to generate your side-by-side evaluation table instantly.
           </p>
-
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 10, maxWidth: 840, margin: "0 auto" }}>
-            {PRESET_COMPARISONS.map(p => (
-              <button
-                key={p.id}
-                type="button"
-                className="btn sec"
-                onClick={() => handleApplyPreset(p.id)}
-                style={{ textAlign: "left", fontSize: 12.5, padding: "8px 14px", display: "flex", alignItems: "center", gap: 8 }}
-              >
-                <span className="badge b-official" style={{ fontSize: 10 }}>{p.badge}</span>
-                <span>{p.title.split(":")[1]?.trim() || p.title}</span>
-              </button>
-            ))}
-          </div>
         </div>
       ) : (
         <>
-          {/* Comparison Table Controls: Attribute Group Menu & Highlight Diff Toggle */}
+          {/* Table Controls Bar: Attribute Group Menu + Highlight Differences */}
           <div
             style={{
               display: "flex",
@@ -622,41 +987,47 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
               alignItems: "center",
               flexWrap: "wrap",
               gap: 12,
-              marginBottom: 12,
-              padding: "10px 14px",
+              marginBottom: 14,
+              padding: "10px 16px",
               background: "var(--bg2)",
               borderRadius: 6,
               border: "1px solid var(--line)",
             }}
           >
-            {/* Attribute Filter Segmented Menu */}
+            {/* Attribute Groups Segmented Menu */}
             <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-              <span className="tt" style={{ marginRight: 4 }}>VIEW ATTRIBUTES:</span>
+              <span className="tt" style={{ marginRight: 4 }}>ATTRIBUTE VIEW:</span>
               {ATTRIBUTE_GROUPS.map(g => (
                 <button
                   key={g.id}
                   type="button"
                   className={`chip ${activeGroup === g.id ? "on" : ""}`}
                   onClick={() => setActiveGroup(g.id)}
-                  style={{ fontSize: 11.5, padding: "4px 10px" }}
+                  style={{ fontSize: 12, padding: "5px 12px", display: "flex", alignItems: "center", gap: 6 }}
                 >
-                  {g.label}
+                  <span>{g.icon}</span>
+                  <span>{g.label}</span>
+                  <span style={{ fontSize: 10, opacity: 0.8, fontFamily: "var(--mono)" }}>({g.count})</span>
                 </button>
               ))}
             </div>
 
             {/* Toggle Highlight Differences */}
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <label
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: 7,
+                  gap: 8,
                   fontSize: 12.5,
                   cursor: "pointer",
                   userSelect: "none",
-                  fontWeight: 500,
+                  fontWeight: 600,
                   color: "var(--paper)",
+                  background: highlightDiff ? "rgba(123, 155, 125, 0.15)" : "transparent",
+                  padding: "4px 8px",
+                  borderRadius: 4,
+                  border: "1px solid var(--line2)",
                 }}
               >
                 <input
@@ -665,32 +1036,37 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
                   onChange={(e) => setHighlightDiff(e.target.checked)}
                   style={{ cursor: "pointer", accentColor: "var(--em)" }}
                 />
-                <span>Highlight Differences</span>
+                <span>⚡ Highlight Differences</span>
+                {highlightDiff && diffCount > 0 && (
+                  <span className="badge b-official" style={{ fontSize: 9.5 }}>
+                    {diffCount} Differ
+                  </span>
+                )}
               </label>
-              <span style={{ color: "var(--muted2)", fontSize: 11 }}>↔ Scroll horizontally to compare</span>
+              <span style={{ color: "var(--muted2)", fontSize: 11.5 }}>↔ Scroll horizontally to view</span>
             </div>
           </div>
 
-          {/* Comparison Table with Sticky Attribute Header & Column Menus */}
+          {/* Comparison Table */}
           <div className="cmp-wrap panel" style={{ padding: 0, marginBottom: 20 }}>
             <table className="cmp">
               <thead>
                 <tr>
-                  <th style={{ width: 180, minWidth: 160 }}>
+                  <th style={{ width: 190, minWidth: 170 }}>
                     <div>ATTRIBUTE</div>
                     <div style={{ fontSize: 10, color: "var(--muted)", textTransform: "none", marginTop: 3 }}>
-                      Showing {visibleRows.length} attributes
+                      {visibleRows.length} attributes listed
                     </div>
                   </th>
 
                   {picked.map((s, colIdx) => (
-                    <th key={s.id} style={{ minWidth: 220, position: "relative" }}>
+                    <th key={s.id} style={{ minWidth: 230, position: "relative" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 6 }}>
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <span
                             onClick={() => go("intel", s.id)}
-                            style={{ cursor: "pointer", color: "var(--paper)", textDecoration: "underline", textUnderlineOffset: 3 }}
-                            title="Click to view Scheme Intelligence"
+                            style={{ cursor: "pointer", color: "var(--paper)", textDecoration: "underline", textUnderlineOffset: 3, fontWeight: 700 }}
+                            title="Click to view full Scheme Intelligence"
                           >
                             {s.short}
                           </span>
@@ -710,7 +1086,7 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
                               setActiveHeaderMenu(activeHeaderMenu === s.id ? null : s.id);
                             }}
                             style={{
-                              padding: "2px 7px",
+                              padding: "2px 8px",
                               fontSize: 11,
                               borderRadius: 4,
                               background: activeHeaderMenu === s.id ? "var(--em)" : "transparent",
@@ -731,7 +1107,7 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
                                 position: "absolute",
                                 right: 0,
                                 top: "calc(100% + 4px)",
-                                width: 200,
+                                width: 210,
                                 background: "var(--panel)",
                                 border: "1px solid var(--line2)",
                                 borderRadius: 6,
@@ -749,7 +1125,8 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
                                 type="button"
                                 onClick={() => {
                                   setActiveHeaderMenu(null);
-                                  setSwappingColIndex(colIdx);
+                                  setActiveSlotMenu(colIdx);
+                                  window.scrollTo({ top: 380, behavior: "smooth" });
                                 }}
                                 style={{
                                   display: "flex",
@@ -846,36 +1223,20 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
                           )}
                         </div>
                       </div>
-
-                      {/* Swapping Dropdown for Column */}
-                      {swappingColIndex === colIdx && (
-                        <div style={{ marginTop: 8 }}>
-                          <SearchableDropdown
-                            value={s.id}
-                            options={schemeOptions}
-                            placeholder="Select replacement scheme..."
-                            searchPlaceholder="Type to swap scheme..."
-                            onChange={(newSchemeId) => updateSlot(colIdx, newSchemeId)}
-                            style={{ maxWidth: "100%" }}
-                          />
-                        </div>
-                      )}
                     </th>
                   ))}
 
-                  {/* Right Header: + Add Column Button */}
-                  {picked.length < 5 && (
+                  {/* Add Column Button inside the table header */}
+                  {picked.length < 4 && (
                     <th style={{ width: 140, minWidth: 120, verticalAlign: "middle", textAlign: "center", background: "rgba(123, 155, 125, 0.05)" }}>
-                      <div style={{ padding: "4px 0" }}>
-                        <SearchableDropdown
-                          value=""
-                          options={schemeOptions.filter(opt => !compare.includes(opt.value))}
-                          placeholder="+ Add Col"
-                          searchPlaceholder="Add column scheme..."
-                          onChange={(newId) => updateSlot(picked.length, newId)}
-                          style={{ maxWidth: 130 }}
-                        />
-                      </div>
+                      <SearchableDropdown
+                        value=""
+                        options={schemeOptions.filter(opt => !compare.includes(opt.value))}
+                        placeholder="+ Add Col"
+                        searchPlaceholder="Add scheme column..."
+                        onChange={(newId) => updateSlot(picked.length, newId)}
+                        style={{ maxWidth: 130 }}
+                      />
                     </th>
                   )}
                 </tr>
@@ -890,7 +1251,7 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                           <span>{row.label}</span>
                           {highlightDiff && isDiff && (
-                            <span className="cmp-diff-tag" title="Values differ across selected schemes">
+                            <span className="cmp-diff-tag" title="Values differ between selected schemes">
                               DIFF
                             </span>
                           )}
@@ -901,7 +1262,7 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
                           {row.render(s)}
                         </td>
                       ))}
-                      {picked.length < 5 && <td style={{ background: "rgba(123, 155, 125, 0.03)" }} />}
+                      {picked.length < 4 && <td style={{ background: "rgba(123, 155, 125, 0.03)" }} />}
                     </tr>
                   );
                 })}
@@ -960,8 +1321,8 @@ export function Compare({ compare = [], toggleCompare, setCompare, go }) {
             </div>
           </div>
 
-          {/* Next Steps & Action Links */}
-          <div style={{ marginTop: 18, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+          {/* Action Footer */}
+          <div style={{ marginTop: 20, display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
             <button className="btn pri" onClick={() => go("combine")}>
               Can I combine these schemes? →
             </button>
