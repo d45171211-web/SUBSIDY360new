@@ -14,6 +14,7 @@ export function SearchableDropdown({
   badgeText,
   disabled = false,
   allowCustom = false,
+  style = {},
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -46,6 +47,14 @@ export function SearchableDropdown({
     );
   }, [normalizedOptions, search]);
 
+  const MAX_VISIBLE = 150;
+  const visibleOptions = useMemo(() => filtered.slice(0, MAX_VISIBLE), [filtered]);
+
+  // Currently selected option object
+  const selectedOpt = useMemo(() => {
+    return normalizedOptions.find(opt => opt.value === value || opt.label === value);
+  }, [normalizedOptions, value]);
+
   // Click outside to close
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -62,7 +71,7 @@ export function SearchableDropdown({
   useEffect(() => {
     if (isOpen && listRef.current) {
       if (value) {
-        const selectedIdx = filtered.findIndex(opt => opt.value === value);
+        const selectedIdx = visibleOptions.findIndex(opt => opt.value === value || opt.label === value);
         if (selectedIdx >= 0) {
           setHighlightIndex(selectedIdx);
           const items = listRef.current.querySelectorAll(".sdrop-item");
@@ -111,19 +120,19 @@ export function SearchableDropdown({
       if (!isOpen) {
         setIsOpen(true);
       } else {
-        setHighlightIndex(prev => (prev + 1 < filtered.length ? prev + 1 : 0));
+        setHighlightIndex(prev => (prev + 1 < visibleOptions.length ? prev + 1 : 0));
       }
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
       if (!isOpen) {
         setIsOpen(true);
       } else {
-        setHighlightIndex(prev => (prev - 1 >= 0 ? prev - 1 : filtered.length - 1));
+        setHighlightIndex(prev => (prev - 1 >= 0 ? prev - 1 : visibleOptions.length - 1));
       }
     } else if (e.key === "Enter") {
       e.preventDefault();
-      if (isOpen && highlightIndex >= 0 && highlightIndex < filtered.length) {
-        handleSelect(filtered[highlightIndex]);
+      if (isOpen && highlightIndex >= 0 && highlightIndex < visibleOptions.length) {
+        handleSelect(visibleOptions[highlightIndex]);
       } else if (allowCustom && search.trim()) {
         onChange(search.trim(), { label: search.trim(), value: search.trim() });
         setSearch("");
@@ -136,13 +145,14 @@ export function SearchableDropdown({
   };
 
   // Determine current display text in input
-  const displayValue = isOpen ? search : (value || "");
+  const displayLabel = selectedOpt ? selectedOpt.label : (value || "");
+  const displayValue = isOpen ? search : displayLabel;
 
   return (
     <div
       ref={containerRef}
       className={`sdrop-container ${disabled ? "sdrop-disabled" : ""}`}
-      style={{ position: "relative", width: "100%", maxWidth: 460 }}
+      style={{ position: "relative", width: "100%", maxWidth: 460, ...style }}
     >
       <div
         className={`sdrop-input-wrap ${isOpen ? "focused" : ""}`}
@@ -183,7 +193,7 @@ export function SearchableDropdown({
           type="text"
           value={displayValue}
           disabled={disabled}
-          placeholder={value ? value : placeholder}
+          placeholder={displayLabel || placeholder}
           onChange={(e) => {
             setSearch(e.target.value);
             if (!isOpen) setIsOpen(true);
@@ -337,63 +347,80 @@ export function SearchableDropdown({
               )}
             </div>
           ) : (
-            filtered.map((opt, i) => {
-              const isSelected = value === opt.value;
-              const isHighlighted = i === highlightIndex;
-              return (
-                <div
-                  key={`${opt.value}-${i}`}
-                  className="sdrop-item"
-                  onClick={() => handleSelect(opt)}
-                  onMouseEnter={() => setHighlightIndex(i)}
-                  role="option"
-                  aria-selected={isSelected}
-                  style={{
-                    padding: "9px 14px",
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    cursor: "pointer",
-                    fontSize: 13.5,
-                    color: isSelected ? "var(--paper)" : "var(--txt)",
-                    fontWeight: isSelected ? 600 : 500,
-                    background: isSelected
-                      ? "var(--panel2)"
-                      : isHighlighted
-                      ? "rgba(123, 155, 125, 0.12)"
-                      : "transparent",
-                    transition: "background .1s ease",
-                  }}
-                >
-                  <div>
-                    <span>{opt.label}</span>
-                    {opt.sub && (
+            <>
+              {visibleOptions.map((opt, i) => {
+                const isSelected = value === opt.value || value === opt.label;
+                const isHighlighted = i === highlightIndex;
+                return (
+                  <div
+                    key={`${opt.value}-${i}`}
+                    className="sdrop-item"
+                    onClick={() => handleSelect(opt)}
+                    onMouseEnter={() => setHighlightIndex(i)}
+                    role="option"
+                    aria-selected={isSelected}
+                    style={{
+                      padding: "9px 14px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      cursor: "pointer",
+                      fontSize: 13.5,
+                      color: isSelected ? "var(--paper)" : "var(--txt)",
+                      fontWeight: isSelected ? 600 : 500,
+                      background: isSelected
+                        ? "var(--panel2)"
+                        : isHighlighted
+                        ? "rgba(123, 155, 125, 0.12)"
+                        : "transparent",
+                      transition: "background .1s ease",
+                    }}
+                  >
+                    <div>
+                      <span>{opt.label}</span>
+                      {opt.sub && (
+                        <span
+                          style={{
+                            fontSize: 11,
+                            color: "var(--muted)",
+                            marginLeft: 8,
+                            fontFamily: "var(--mono)",
+                          }}
+                        >
+                          ({opt.sub})
+                        </span>
+                      )}
+                    </div>
+                    {isSelected && (
                       <span
                         style={{
-                          fontSize: 11,
-                          color: "var(--muted)",
-                          marginLeft: 8,
-                          fontFamily: "var(--mono)",
+                          color: "var(--em)",
+                          fontSize: 14,
+                          fontWeight: "bold",
                         }}
                       >
-                        ({opt.sub})
+                        ✓
                       </span>
                     )}
                   </div>
-                  {isSelected && (
-                    <span
-                      style={{
-                        color: "var(--em)",
-                        fontSize: 14,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      ✓
-                    </span>
-                  )}
+                );
+              })}
+              {filtered.length > MAX_VISIBLE && (
+                <div
+                  style={{
+                    padding: "8px 14px",
+                    textAlign: "center",
+                    fontSize: 11,
+                    color: "var(--muted)",
+                    background: "var(--bg2)",
+                    borderTop: "1px solid var(--line)",
+                    fontFamily: "var(--mono)",
+                  }}
+                >
+                  Showing top {MAX_VISIBLE} of {filtered.length} matching options. Type to narrow search.
                 </div>
-              );
-            })
+              )}
+            </>
           )}
         </div>
       )}

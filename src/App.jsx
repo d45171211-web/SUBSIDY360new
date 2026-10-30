@@ -41,7 +41,7 @@ function Shell() {
     overview: <Overview go={go} setQuery={setQuery} />,
     discover: <Discover go={go} profile={profile} compare={compare} toggleCompare={toggleCompare} query={query} setQuery={setQuery} />,
     eligibility: <Eligibility go={go} profile={profile} setProfile={setProfile} />,
-    compare: <Compare compare={compare} toggleCompare={toggleCompare} go={go} />,
+    compare: <Compare compare={compare} toggleCompare={toggleCompare} setCompare={setCompare} go={go} />,
     intel: <Intelligence schemeId={schemeId} setSchemeId={setSchemeId} go={go} profile={profile} />,
     combine: <Combine compare={compare} />,
     money: <PublicMoney openMethod={() => setMethod(true)} />,

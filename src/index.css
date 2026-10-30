@@ -174,7 +174,7 @@ select.sel option{background:var(--bg2);color:var(--txt)}
   -webkit-overflow-scrolling:touch;
   position:relative;
   border-radius:6px;
-  background-image:linear-gradient(to right, transparent, rgba(6,13,26,.8));
+  background-image:linear-gradient(to right, transparent, rgba(234, 240, 233, 0.8));
   background-position:right center;
   background-repeat:no-repeat;
   background-size:24px 100%;
@@ -184,7 +184,10 @@ table.cmp th,table.cmp td{border-right:1px solid var(--line);border-bottom:1px s
 table.cmp th{background:var(--panel2);font:600 12px var(--mono);letter-spacing:.05em;color:var(--cy);text-transform:uppercase;border-top:1px solid var(--line)}
 table.cmp th:first-child{position:sticky;left:0;z-index:3;background:var(--panel2);border-left:1px solid var(--line)}
 table.cmp td:first-child{border-left:1px solid var(--line)}
-table.cmp td.lbl{background:#0c172d;color:var(--muted);font-weight:500;width:170px;min-width:150px;position:sticky;left:0;z-index:2;box-shadow:2px 0 6px rgba(0,0,0,.25)}
+table.cmp td.lbl{background:var(--bg2);color:var(--paper);font-weight:600;width:170px;min-width:150px;position:sticky;left:0;z-index:2;box-shadow:2px 0 6px rgba(31,59,46,.08)}
+.cmp-row-diff td{background:rgba(123, 155, 125, 0.06)}
+.cmp-row-diff td.lbl{background:var(--panel2);color:var(--em)}
+.cmp-diff-tag{display:inline-block;margin-left:6px;font:600 9px var(--mono);color:var(--gold);background:rgba(161,130,74,.14);padding:1px 5px;border-radius:2px;letter-spacing:.04em}
 
 /* drawer */
 .drawer-bg{position:fixed;inset:0;background:rgba(4,9,18,.72);z-index:80;display:flex;justify-content:flex-end}
