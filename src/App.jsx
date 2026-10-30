@@ -15,7 +15,7 @@ import { About } from "./pages/About.jsx";
 const NAV = [
   ["overview", "Overview"], ["discover", "Discover Schemes"], ["eligibility", "My Eligibility"],
   ["compare", "Compare"], ["intel", "Scheme Intelligence"], ["combine", "Combination Engine"],
-  ["money", "Public Money"], ["about", "About / Methodology"],
+  ["money", "Public Money"], ["about", "About"],
 ];
 
 function Shell() {

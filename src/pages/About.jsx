@@ -2,7 +2,7 @@
 export function About({ openMethod }) {
   return (
     <div className="fadein" style={{ padding: "34px 0", maxWidth: 820 }}>
-      <div className="eyebrow" style={{ marginBottom: 10 }}>About / Methodology</div>
+      <div className="eyebrow" style={{ marginBottom: 10 }}>About</div>
       <h2 className="sec" style={{ marginBottom: 14 }}>An economics project on subsidy transparency</h2>
       <p style={{ color: "var(--muted)", marginBottom: 14 }}>
         Subsidy360 is a prototype interface exploring how India's citizens — farmers, students, households, entrepreneurs and MSMEs — could navigate government schemes the way analysts navigate markets: with sources, ceilings, budget lines and honest gaps, rather than hearsay.
@@ -15,9 +15,9 @@ export function About({ openMethod }) {
           ["Informational, not official", "Match scores and combination checks are decision aids. Eligibility is decided only by the administering authority."],
           ["Comprehensive catalogue", "Over 4,600 government schemes indexed across Union and State levels with verified sources and strict honesty rules."],
           ["BE ≠ spent", "Budget estimates are plans. The interface never converts an allocation into “sanctioned”, “released” or “utilised”."]].map(([k, v]) => (
-          <div key={k} className="panel" style={{ padding: 18 }}>
-            <div className="mono" style={{ color: "var(--cy)", fontWeight: 600, fontSize: 13, marginBottom: 6 }}>{k}</div>
-            <div style={{ fontSize: 13.5, color: "var(--muted)" }}>{v}</div>
+          <div key={k} className="panel" style={{ padding: 18, borderColor: "rgba(200, 182, 226, 0.45)" }}>
+            <div className="mono" style={{ color: "var(--lilac)", fontWeight: 600, fontSize: 13, marginBottom: 6 }}>{k}</div>
+            <div style={{ fontSize: 13.5, color: "var(--lilac-muted)" }}>{v}</div>
           </div>
         ))}
       </div>
