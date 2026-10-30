@@ -78,17 +78,17 @@ export function Overview({ go, setQuery }) {
             </div>
           </div>
           <div className="panel lt" style={{ padding: 22, display: "flex", flexDirection: "column", gap: 12 }}>
-            <span className="eyebrow" style={{ color: "rgba(255, 255, 255, 0.9)" }}>Guided path</span>
+            <span className="eyebrow" style={{ color: "#FFFFFF" }}>Guided path</span>
             <h2 className="sec" style={{ color: "#FFFFFF" }}>Not sure where to start?</h2>
-            <p style={{ color: "rgba(255, 255, 255, 0.88)", fontSize: 13.5 }}>
+            <p style={{ color: "#FFFFFF", fontSize: 13.5 }}>
               Answer a short profile — state, applicant type, sector, income band and project size — and Subsidy360 ranks every indexed scheme against your answers with a transparent breakdown.
             </p>
             {["Location & applicant screening", "Investment-range fit", "Loan requirement check", "Reason-coded match analysis"].map((x, i) => (
               <div key={x} style={{ display: "flex", gap: 10, fontSize: 13.5, color: "#FFFFFF" }}>
-                <span className="mono" style={{ color: "rgba(255, 255, 255, 0.85)", fontWeight: 600 }}>{String(i + 1).padStart(2, "0")}</span>{x}
+                <span className="mono" style={{ color: "#FFFFFF", fontWeight: 600 }}>{String(i + 1).padStart(2, "0")}</span>{x}
               </div>
             ))}
-            <button className="btn pri" style={{ marginTop: "auto", alignSelf: "flex-start", borderColor: "rgba(255, 255, 255, 0.25)" }} onClick={() => go("eligibility")}>Start eligibility check →</button>
+            <button className="btn pri" style={{ marginTop: "auto", alignSelf: "flex-start", background: "#14281E", color: "#FFFFFF", border: "1px solid rgba(255, 255, 255, 0.35)" }} onClick={() => go("eligibility")}>Start eligibility check →</button>
           </div>
         </div>
       </section>
