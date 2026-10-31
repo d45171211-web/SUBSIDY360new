@@ -2,9 +2,11 @@ import { useState, useMemo } from "react";
 import { APPLICANTS, SECTORS, INCOME_BANDS, INVEST_BANDS } from "../data/constants.js";
 import { useCatalogue } from "../context/CatalogueContext.jsx";
 import { matchScheme } from "../engine/matching.js";
+import { fmtL } from "../engine/format.js";
 import { Check } from "../components/Check.jsx";
 import { SearchableDropdown } from "../components/SearchableDropdown.jsx";
 import { SelfEligibilityChecklist } from "../components/SelfEligibilityChecklist.jsx";
+import { RealCostCalculator } from "../components/RealCostCalculator.jsx";
 import { ALL_INDIAN_STATES, getDistrictsForState, getAllDistrictsFlattened } from "../data/indiaLocations.js";
 
 const POPULAR_STATES = [
@@ -102,6 +104,7 @@ export function Eligibility({ go, profile, setProfile }) {
 
   const [step, setStep] = useState(profile ? 99 : 0);
   const [p, setP] = useState(profile || { state: "", district: "", applicant: "", sector: "", income: "", invest: null, stage: "", loan: null });
+  const [selectedSchemeId, setSelectedSchemeId] = useState("");
 
   const currentDistricts = useMemo(() => {
     return p.state ? getDistrictsForState(p.state) : [];
@@ -256,31 +259,55 @@ export function Eligibility({ go, profile, setProfile }) {
   );
 
   if (step >= steps.length || step === 99) {
-    const top = ranked[0];
-    const grade = top.m.score >= 80 ? "Strong Match" : top.m.score >= 55 ? "Possible Match" : "Weak Match";
+    const activeSchemeId = selectedSchemeId || ranked[0]?.s?.id;
+    const currentMatch = ranked.find(r => r.s.id === activeSchemeId) || ranked[0];
+    const currentScheme = currentMatch?.s || SCHEMES[0];
+    const currentScore = currentMatch?.m?.score ?? 0;
+    const grade = currentScore >= 80 ? "Strong Match" : currentScore >= 55 ? "Possible Match" : "Weak Match";
+    const isTop = currentScheme?.id === ranked[0]?.s?.id;
     const R = 62, C = 2 * Math.PI * R;
+
     return (
       <div className="fadein" style={{ padding: "34px 0" }}>
-        <div className="eyebrow em" style={{ marginBottom: 10 }}>Your Subsidy Match Profile</div>
+        <div className="eyebrow em" style={{ marginBottom: 10 }}>Your Subsidy Match Profile & Real Cost Analysis</div>
         <div className="two-col" style={{ alignItems: "start" }}>
           <div>
-            <div className="panel" style={{ padding: 24, display: "flex", gap: 26, alignItems: "center", flexWrap: "wrap" }}>
+            {/* Top Match / Selected Scheme Overview Card */}
+            <div className="panel" style={{ padding: 24, display: "flex", gap: 26, alignItems: "center", flexWrap: "wrap", marginBottom: 14 }}>
               <div className="ringwrap">
-                <svg width="150" height="150" viewBox="0 0 150 150" role="img" aria-label={`Top match ${top.m.score}%`}>
+                <svg width="150" height="150" viewBox="0 0 150 150" role="img" aria-label={`Match fit ${currentScore}%`}>
                   <circle cx="75" cy="75" r={R} fill="none" stroke="#1D3050" strokeWidth="9" />
-                  <circle cx="75" cy="75" r={R} fill="none" stroke={top.m.score >= 70 ? "#17C787" : "#E8B25E"} strokeWidth="9"
-                    strokeDasharray={C} strokeDashoffset={C * (1 - top.m.score / 100)} strokeLinecap="round" transform="rotate(-90 75 75)"
+                  <circle cx="75" cy="75" r={R} fill="none" stroke={currentScore >= 70 ? "#17C787" : "#E8B25E"} strokeWidth="9"
+                    strokeDasharray={C} strokeDashoffset={C * (1 - currentScore / 100)} strokeLinecap="round" transform="rotate(-90 75 75)"
                     style={{ transition: "stroke-dashoffset 1s ease" }} />
                 </svg>
                 <div className="num">
-                  <span className="mono" style={{ fontSize: 34, fontWeight: 600, color: "var(--paper)" }}>{top.m.score}%</span>
-                  <span style={{ fontSize: 11.5, color: top.m.score >= 70 ? "var(--em)" : "var(--amber)", fontWeight: 600 }}>{grade}</span>
+                  <span className="mono" style={{ fontSize: 34, fontWeight: 600, color: "var(--paper)" }}>{currentScore}%</span>
+                  <span style={{ fontSize: 11.5, color: currentScore >= 70 ? "var(--em)" : "var(--amber)", fontWeight: 600 }}>{grade}</span>
                 </div>
               </div>
               <div style={{ flex: 1, minWidth: 220 }}>
-                <div className="tt" style={{ marginBottom: 4 }}>Top-ranked scheme for your profile</div>
-                <div style={{ fontFamily: "var(--serif)", fontWeight: 700, fontSize: 20, color: "var(--paper)" }}>{top.s.short}</div>
-                <div style={{ fontSize: 12.5, color: "var(--muted)", margin: "3px 0 8px" }}>{top.s.name}</div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                  <span className="tt" style={{ textTransform: "uppercase" }}>
+                    {isTop ? "★ Top-Ranked Scheme for Profile" : "Selected Scheme for Evaluation"}
+                  </span>
+                  {!isTop && (
+                    <button
+                      type="button"
+                      className="btn ghost"
+                      onClick={() => setSelectedSchemeId(ranked[0]?.s?.id)}
+                      style={{ fontSize: 11, padding: "2px 6px" }}
+                    >
+                      ← Back to Top ({ranked[0]?.s?.short})
+                    </button>
+                  )}
+                </div>
+                <div style={{ fontFamily: "var(--serif)", fontWeight: 700, fontSize: 20, color: "var(--paper)" }}>
+                  {currentScheme.short}
+                </div>
+                <div style={{ fontSize: 12.5, color: "var(--muted)", margin: "3px 0 8px" }}>
+                  {currentScheme.name} · {currentScheme.dept?.split("·")[0].trim()}
+                </div>
                 {(p.state || p.district || p.sector) && (
                   <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
                     {p.state && <span className="badge b-official">📍 {p.state}</span>}
@@ -289,36 +316,132 @@ export function Eligibility({ go, profile, setProfile }) {
                   </div>
                 )}
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  <button className="btn pri" onClick={() => go("intel", top.s.id)}>Open scheme intelligence →</button>
-                  <button className="btn sec" onClick={() => { setStep(0); setP({ state: "", district: "", applicant: "", sector: "", income: "", invest: null, stage: "", loan: null }); setProfile(null); }}>Redo profile</button>
+                  <button className="btn pri" onClick={() => go("intel", currentScheme.id)}>Open scheme intelligence →</button>
+                  <button className="btn sec" onClick={() => { setStep(0); setP({ state: "", district: "", applicant: "", sector: "", income: "", invest: null, stage: "", loan: null }); setProfile(null); setSelectedSchemeId(""); }}>Redo profile</button>
                 </div>
               </div>
             </div>
-            <div className="panel" style={{ padding: "10px 20px", marginTop: 14 }}>
-              <div className="tt" style={{ padding: "10px 0 4px" }}>Transparent breakdown — {top.s.short}</div>
-              {top.m.checks.map(c => <Check key={c.k} c={c} />)}
+
+            {/* Scheme Selector Bar to Switch Active Subsidy for Calculator */}
+            <div className="panel" style={{ padding: "14px 18px", marginBottom: 16, background: "var(--panel2)", border: "1px solid var(--line2)", borderRadius: 6 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6, flexWrap: "wrap", gap: 6 }}>
+                <label className="tt" style={{ fontWeight: 700, color: "var(--paper)", letterSpacing: ".05em" }}>
+                  SELECT SUBSIDY / SCHEME TO CALCULATE REAL COST:
+                </label>
+                <span style={{ fontSize: 11.5, color: "var(--muted)" }}>
+                  Switch among your {ranked.length} profile-matched schemes
+                </span>
+              </div>
+              <SearchableDropdown
+                value={currentScheme.id}
+                options={ranked.map(({ s, m }) => ({
+                  label: `${s.short} (${m.score}% match)`,
+                  value: s.id,
+                  sub: `${s.level} · ${s.maxBenefitL != null ? `Max ${fmtL(s.maxBenefitL)}` : "Scale-based"} · ${s.dept ? s.dept.split("·")[0].trim() : ""}`,
+                }))}
+                placeholder="Search or pick scheme to calculate real cost..."
+                searchPlaceholder="Type scheme name to evaluate..."
+                badgeText={isTop ? "★ Top Match Scheme" : `Selected: ${currentScheme.short}`}
+                onChange={(newId) => setSelectedSchemeId(newId)}
+                style={{ maxWidth: "100%" }}
+              />
             </div>
+
+            {/* REAL COST CALCULATOR (Directly after selecting the subsidy) */}
+            <RealCostCalculator scheme={currentScheme} profile={p} />
+
+            {/* Transparent Criteria Breakdown */}
+            <div className="panel" style={{ padding: "14px 20px", marginTop: 18 }}>
+              <div className="tt" style={{ padding: "6px 0 10px", fontSize: 11.5, color: "var(--paper)", fontWeight: 700 }}>
+                Transparent Eligibility Breakdown — {currentScheme.short} ({currentScore}% Match)
+              </div>
+              {currentMatch.m.checks.map(c => <Check key={c.k} c={c} />)}
+            </div>
+
+            {/* Self Eligibility Checklist */}
             <SelfEligibilityChecklist
-              scheme={top.s}
-              match={top.m}
+              scheme={currentScheme}
+              match={currentMatch.m}
               profile={p}
-              onOpenIntel={(id) => go("intel", id || top.s.id)}
-              onSelectScheme={(id) => go("intel", id)}
+              onOpenIntel={(id) => go("intel", id || currentScheme.id)}
+              onSelectScheme={(id) => setSelectedSchemeId(id)}
             />
           </div>
+
+          {/* Right Column: Ranked Schemes List with 1-Click In-Place Calculator Selection */}
           <div>
-            <div className="tt" style={{ marginBottom: 10 }}>Top {Math.min(40, ranked.length)} of {ranked.length.toLocaleString("en-IN")} schemes ranked against your profile</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 6 }}>
+              <div className="tt" style={{ textTransform: "uppercase" }}>
+                Eligible Schemes Ranked ({Math.min(40, ranked.length)} shown)
+              </div>
+              <span style={{ fontSize: 11, color: "var(--muted)" }}>
+                Click to calculate real cost
+              </span>
+            </div>
+
             <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-              {ranked.slice(0, 40).map(({ s, m }) => (
-                <button key={s.id} className="panel" onClick={() => go("intel", s.id)}
-                  style={{ padding: "12px 14px", textAlign: "left", cursor: "pointer", color: "var(--txt)", display: "block", width: "100%" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 7 }}>
-                    <span style={{ fontWeight: 600, fontSize: 13.5 }}>{s.short}</span>
-                    <span className="mono" style={{ fontSize: 12.5, color: m.score >= 70 ? "var(--em)" : m.score >= 40 ? "var(--amber)" : "var(--red)" }}>{m.score}%</span>
+              {ranked.slice(0, 40).map(({ s, m }) => {
+                const isSelected = s.id === currentScheme.id;
+                return (
+                  <div
+                    key={s.id}
+                    className="panel"
+                    onClick={() => {
+                      setSelectedSchemeId(s.id);
+                      window.scrollTo({ top: 120, behavior: "smooth" });
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setSelectedSchemeId(s.id); }}
+                    style={{
+                      padding: "12px 14px",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      color: "var(--txt)",
+                      display: "block",
+                      width: "100%",
+                      borderRadius: 6,
+                      border: isSelected ? "2px solid var(--em)" : "1px solid var(--line)",
+                      background: isSelected ? "var(--panel2)" : "var(--panel)",
+                      boxShadow: isSelected ? "0 4px 14px rgba(31, 59, 46, 0.12)" : "var(--card-shadow)",
+                      transition: "all .15s ease",
+                      outline: "none",
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", gap: 10, marginBottom: 7, alignItems: "center" }}>
+                      <span style={{ fontWeight: isSelected ? 700 : 600, fontSize: 13.5, color: isSelected ? "var(--paper)" : "var(--txt)" }}>
+                        {s.short}
+                      </span>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        {isSelected && (
+                          <span className="badge b-official" style={{ fontSize: 9, padding: "1px 5px" }}>
+                            CALCULATING ✓
+                          </span>
+                        )}
+                        <span className="mono" style={{ fontSize: 12.5, color: m.score >= 70 ? "var(--em)" : m.score >= 40 ? "var(--amber)" : "var(--red)" }}>
+                          {m.score}%
+                        </span>
+                      </div>
+                    </div>
+                    <div className="progress"><i style={{ width: `${m.score}%` }} /></div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8, fontSize: 11, color: "var(--muted)" }}>
+                      <span>{s.level} · {s.maxBenefitL != null ? `Max ${fmtL(s.maxBenefitL)}` : "Scale-based"}</span>
+                      <button
+                        type="button"
+                        className="btn ghost"
+                        style={{ fontSize: 10.5, padding: "1px 4px" }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          go("intel", s.id);
+                        }}
+                        title="View Scheme Intelligence"
+                      >
+                        Intel →
+                      </button>
+                    </div>
                   </div>
-                  <div className="progress"><i style={{ width: `${m.score}%` }} /></div>
-                </button>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
